@@ -13,7 +13,7 @@
   },
   {
      "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug.md",
-     "title": "SSRF-induced Cache Poisoning Logic Bug",
+     "title": "SSRF-induced Cache Poisoning Logic Bug(vi)",
      "category": "Bug_Bounty",
      "image": "/images/favicon.ico"
   },
@@ -22,5 +22,11 @@
      "title": "",
      "category": "Private_Program",
      "image": ""
+  },
+  {
+     "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug-translated.md",
+     "title": "SSRF-induced Cache Poisoning Logic Bug(en)",
+     "category": "Bug_Bounty",
+     "image": "/images/favicon.ico"
   }
 ]
