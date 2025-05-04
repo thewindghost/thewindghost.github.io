@@ -1,7 +1,7 @@
 [
   {
-     "filename": "cache-poisoning.md",
-     "title": "Cache Poisoning Attack",
+     "filename": "",
+     "title": "",
      "category": "Direct_Collaboration",
      "image": ""
   },
@@ -12,45 +12,15 @@
      "image": "/images/favicon.ico"
   },
   {
-     "filename": "cve-2025-23001.md",
-     "title": "CVE-2025-23001 Header Injection",
-     "category": "CVE",
-     "image": ""
-  },
-  {
-     "filename": "home.md",
-     "title": "Bug Bounty Writeup ABC",
+     "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug.md",
+     "title": "SSRF-induced Cache Poisoning Logic Bug",
      "category": "Bug_Bounty",
-     "image": ""
-  },
-  {
-     "filename": "test.md",
-     "title": "test",
-     "category": "Private_Program",
-     "image": ""
-  },
-  {
-     "filename": "cve-2025-23001.md",
-     "title": "test1111",
-     "category": "Private_Program11111",
-     "image": "https://media.geeksforgeeks.org/wp-content/uploads/20230216140137/Cyber-security-tutorial-banner.jpg"
-  },
-  {
-     "filename": "cve-2025-23001.md",
-     "title": "CVE-2025-23001 Host Header Injection",
-     "category": "CVE",
      "image": "/images/favicon.ico"
   },
   {
      "filename": "",
      "title": "",
-     "category": "aaa",
-     "image": ""
-  },
-  {
-     "filename": "",
-     "title": "",
-     "category": "aaa",
+     "category": "Private_Program",
      "image": ""
   }
 ]
