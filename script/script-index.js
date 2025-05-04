@@ -329,7 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 11. Hàm tách YAML front-matter
 function extractFrontMatter(md) {
-    const regex = /^---\n([\s\S]+?)\n---\n?/;
+    const regex = /^---\s*[\r\n]+([\s\S]+?)[\r\n]+---/;
     const match = md.match(regex);
 
     let metadata = {};
