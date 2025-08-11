@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("scroll", scrollHandler);
     window.addEventListener("DOMContentLoaded", loadMarkdown);
 
-    // Xử lý nút đổi kích thước
+    // ✅ Xử lý nút đổi kích thước
     const toggleBtn = document.getElementById("toggleWidthBtn");
     if (toggleBtn) {
         toggleBtn.addEventListener("click", () => {
@@ -314,8 +314,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Cập nhật text của nút
             toggleBtn.textContent = isFocus ?
-                "Exit full screen mode" :
-                "Full Screen";
+                "🔙 Exit full screen mode" :
+                "🖥️ Full Screen";
 
             // Ẩn hoặc hiện TOC tùy vào chế độ focus mode
             if (toc) {
@@ -401,31 +401,18 @@ function createCategorySectionAtTop(category) {
     const h2 = document.createElement('h2');
     const ul = document.createElement('ul');
 
-    // ==========================
-    // 1. Chọn icon random từ list
-    //const randomIcons = ['💥', '⚡', '🧠', '💻', '🕶️', '⚙️', '🌐', '🚀', '👾', '📡', '🦾'];
-    //const randIcon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-
-    // 2. Tạo slug và tiêu đề
+    // Tạo slug và tiêu đề
     const titleText = formatCategoryTitle(category);
     const slug = slugify(titleText);
     h2.id = slug;
 
-    // 3. Chèn icon random trước tiêu đề
-    const spanIcon = document.createElement('span');
-    spanIcon.textContent = randIcon;
-    spanIcon.style.marginRight = '0.5em';
-    h2.appendChild(spanIcon); // sẽ được prepend bên dưới
-
-    // 4. Chèn text tiêu đề
+    // Chỉ chèn text tiêu đề
     h2.appendChild(document.createTextNode(titleText));
 
-    // 5. Chèn icon link “🔗” ngay sau tiêu đề
+    // Chèn icon link “🔗” ngay sau tiêu đề
     const copyIcon = createCopyLinkIcon(slug);
     h2.appendChild(copyIcon);
-    // ==========================
 
-    // bắt đầu từ đoạn này không được xoá, tính năng section để tự render ra post sau khi update bên posts.json
     ul.id = categoryToId(category);
 
     section.appendChild(h2);
@@ -460,7 +447,7 @@ function createCopyLinkIcon(slug) {
 }
 
 
-// Hàm render chính
+// ✅ Hàm render chính
 async function renderPostLists() {
     try {
         const res = await fetch("/posts/posts.json", {
@@ -471,7 +458,7 @@ async function renderPostLists() {
         const posts = await res.json();
         allPosts = posts;
 
-        //Tự code UI riêng, tương ứng với id cố định bên index.html
+        // ⚙️ Tự code UI riêng, tương ứng với id cố định bên index.html
         const categories = {
             Bug_Bounty: "bugbounty-list",
             CVE: "cve-list",
@@ -618,4 +605,3 @@ if (footer && toc && toc.style.display !== "none") {
 } else if (footer) {
     footer.style.display = "none";
 }
-
