@@ -447,70 +447,72 @@ function createCopyLinkIcon(slug) {
 }
 
 
-// ✅ Hàm render chính
+// Hàm render chính
 async function renderPostLists() {
-    try {
-        const res = await fetch("/posts/posts.json", {
+        try {
+            const res = await fetch("/posts/posts.json", {
             cache: "no-store"
-        });
-        if (!res.ok) throw new Error("Không thể load posts.json");
-
-        const posts = await res.json();
-        allPosts = posts;
-
-        // ⚙️ Tự code UI riêng, tương ứng với id cố định bên index.html
-        const categories = {
-            Bug_Bounty: "bugbounty-list",
-            CVE: "cve-list",
-            Private_Program: "privateprogram-list",
-            Direct_Collaboration: "directcollab-list",
-        };
-
-        const createdDynamicSections = {};
-
-        posts.forEach((post) => {
-            const category = post.category || "Uncategorized";
-            let listId = categories[category];
-
-            // Nếu không thuộc category định nghĩa sẵn, thì tự tạo section mới (chỉ tạo 1 lần)
-            if (!listId) {
-                listId = categoryToId(category);
-                if (!createdDynamicSections[listId]) {
-                    createCategorySectionAtTop(category);
-                    createdDynamicSections[listId] = true;
-                }
-            }
-
-            const targetList = document.getElementById(listId);
-            if (!targetList) return; // Nếu listId không tồn tại trong DOM (vì bạn tự custom), bỏ qua
-
-            const li = document.createElement("li");
-            const a = document.createElement("a");
-            a.href = `#${post.filename.replace(".md", "")}`;
-            a.classList.add("post-list-item");
-
-            if (post.image) {
-                const img = document.createElement("img");
-
-                img.src = post.image;
-                img.alt = post.title;
-                img.classList.add("post-image");
-
-                a.appendChild(img);
-
-                const title = document.createElement("h3");
-                title.textContent = post.title;
-
-                a.appendChild(title);
-            } else {
-                a.textContent = post.title;
-            }
-
-            li.appendChild(a);
-            targetList.appendChild(li);
-        });
-    } catch (err) {}
-}
+            });
+            if (!res.ok) throw new Error("Không thể load posts.json");
+    
+            const posts = await res.json();
+            allPosts = posts;
+    
+            const categories = {
+                Bug_Bounty: "bugbounty-list",
+                CVE: "cve-list",
+                Private_Program: "privateprogram-list",
+                Direct_Collaboration: "directcollab-list",
+            };
+    
+            const createdDynamicSections = {};
+    
+            posts.forEach((post) => {
+                // --- THÊM ĐOẠN KIỂM TRA NÀY VÀO ĐÂY ---
+                // Nếu không có filename hoặc title, bỏ qua mục này
+                if (!post.filename || !post.title) {
+                    return;
+                }
+    
+                const category = post.category || "Uncategorized";
+                let listId = categories[category];
+    
+                // ... (phần code còn lại giữ nguyên)
+                if (!listId) {
+                    listId = categoryToId(category);
+                    if (!createdDynamicSections[listId]) {
+                        createCategorySectionAtTop(category);
+                        createdDynamicSections[listId] = true;
+                    }
+                }
+    
+                const targetList = document.getElementById(listId);
+                if (!targetList) return;
+    
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.href = `#${post.filename.replace(".md", "")}`;
+                a.classList.add("post-list-item");
+    
+                if (post.image) {
+                    const img = document.createElement("img");
+                    img.src = post.image;
+                    img.alt = post.title;
+                    img.classList.add("post-image");
+                    a.appendChild(img);
+    
+                    const title = document.createElement("h3");
+                    title.textContent = post.title;
+                    a.appendChild(title);
+                } else {
+                    a.textContent = post.title;
+                }
+    
+                li.appendChild(a);
+                targetList.appendChild(li);
+            });
+        } catch (err) {}
+    }
 
 // ---------------------------------------------------------------------------
 
