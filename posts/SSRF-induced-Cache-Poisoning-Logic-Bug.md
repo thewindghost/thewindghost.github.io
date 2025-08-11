@@ -123,7 +123,7 @@ Priority: u=0, i
 ### Một số lưu ý về lỗ hổng
 Lỗ hổng này có thể dẫn đến tấn công Open Redirect, nghe có vẻ low-impact, nhưng vấn đề nằm ở chỗ payload có thể được lưu vĩnh viễn trong cache. Điều này khiến mỗi khi người dùng truy cập vào endpoint đó, họ đều bị chuyển hướng, tạo ra một cuộc tấn công hàng loạt.
 
-![alt text](https://mermaid.ink/img/pako:eNp9kV9PwjAUxb9Kcw1viIx_gz6YwBCMYmLEoHHzoWyXrbFrsXQGJfvudgUMJsY-9d7fOec2tzuIVYJAoVbbcckNJbtIEhKByTDHCKi9JrhihTAR1E_QgmnOlgI3lcZ5KrRS0sz518Ho9dbbg-sIn5CnmdnjpRLJCTa4NYESSu_pWdOdE4HgEv8VYJLijC1RjFj8lmpVSJtPrXLlTgSVsIxkWdZqkUw1W2dk9lA1h-GCx488fyXn55fkJnzA9wI3Zl-OwkCoIplo-_7XSn0VzlF_oCZDY-wk1HvdbXjHBI-5Kjbkd0BlGrlrcLC6nMC1xuG9VttPMkETZ2TMDHNw7OB1GExIwOIMyU-4w9cOT09GzhfTi-e7maNTR4dQh1TzBKjRBdYhR52zqoQ_Ppnpt2pBpfWsmXxRKj_a7CLTDOiKiY2tinXCDI45s_vLf7oaZYI6sCs3QNt-14UA3cEWaN9r9Pp-p9dp-l3fG3gWflpRq9Xo9Hyv3ep3297A98s6fLmpzUbf75bfvnzLWw)
+![alt text](https://mermaid.ink/img/pako:eNp9km9vmzAQxr-KdVPe0SzkH5QXkxKyptpSaWqidBr0hQMXsGpsZsyUNOK7z5i2o9M0v7rz73nuTj5fIJEpQgCDwYUJpgNyiQUhMegcC4whMGGKR1pzHYPTQ3uqGD1wrFqN9bToKIXesucXozsvTy-uV_iALMt1hw-Spz2s8aRDyaXq6IeRPT0BZwL_K8A0ww09IF_S5ClTshamfmCUR3tiaIVNLJpmMIhFpmiZk819e7mI9izZseKRXF19Il-ie_xZY6W7dBmFXNbpjTLzP7bqz9FCa9MCVSf4Gt1RzhIm64q8c4atetmF0RbVL1RkX3OBih4YZ_psy4Vdlz_hKvqm5OlMblAnOVlRTa1uZeFtr1lX0sJbC9c9GJpxUWiy3a8_fr_bWNX677F270avSikqtMqdxQtwIFMshUCrGh0oUBW0TeEf34Sqp_aJG-MpqfghZfFqM6vIcgiOlFcmq8uUalwxajZQvN0qFCmq0CxNQzB1fVsEggucIPDd4dz3pvPpyJt57rU7c-AMwWQ8Hk7nnjsZ-7OJe-15jQPPtuto6Huz5jcMZeBn)
 
 ## 5. Link Tham Khảo:
 
