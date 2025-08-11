@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("scroll", scrollHandler);
     window.addEventListener("DOMContentLoaded", loadMarkdown);
 
-    // ✅ Xử lý nút đổi kích thước
+    // Xử lý nút đổi kích thước
     const toggleBtn = document.getElementById("toggleWidthBtn");
     if (toggleBtn) {
         toggleBtn.addEventListener("click", () => {
@@ -314,8 +314,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Cập nhật text của nút
             toggleBtn.textContent = isFocus ?
-                "🔙 Exit full screen mode" :
-                "🖥️ Full Screen";
+                "Exit full screen mode" :
+                "Full Screen";
 
             // Ẩn hoặc hiện TOC tùy vào chế độ focus mode
             if (toc) {
@@ -385,10 +385,10 @@ function formatCategoryTitle(category) {
 
 function categoryIconFromTitle(category) {
     const icons = {
-        Bug_Bounty: "🐞",
-        CVE: "🛡️",
-        Private_Program: "🔒",
-        Direct_Collaboration: "🤝",
+        Bug_Bounty: "",
+        CVE: "",
+        Private_Program: "",
+        Direct_Collaboration: "",
     };
 
     return icons[category] || ""; // với category mới, trả về ''
@@ -403,8 +403,8 @@ function createCategorySectionAtTop(category) {
 
     // ==========================
     // 1. Chọn icon random từ list
-    const randomIcons = ['💥', '⚡', '🧠', '💻', '🕶️', '⚙️', '🌐', '🚀', '👾', '📡', '🦾'];
-    const randIcon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
+    //const randomIcons = ['💥', '⚡', '🧠', '💻', '🕶️', '⚙️', '🌐', '🚀', '👾', '📡', '🦾'];
+    //const randIcon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
 
     // 2. Tạo slug và tiêu đề
     const titleText = formatCategoryTitle(category);
@@ -460,7 +460,7 @@ function createCopyLinkIcon(slug) {
 }
 
 
-// ✅ Hàm render chính
+// Hàm render chính
 async function renderPostLists() {
     try {
         const res = await fetch("/posts/posts.json", {
@@ -471,7 +471,7 @@ async function renderPostLists() {
         const posts = await res.json();
         allPosts = posts;
 
-        // ⚙️ Tự code UI riêng, tương ứng với id cố định bên index.html
+        //Tự code UI riêng, tương ứng với id cố định bên index.html
         const categories = {
             Bug_Bounty: "bugbounty-list",
             CVE: "cve-list",
@@ -618,3 +618,4 @@ if (footer && toc && toc.style.display !== "none") {
 } else if (footer) {
     footer.style.display = "none";
 }
+
