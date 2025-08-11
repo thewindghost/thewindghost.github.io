@@ -9,7 +9,7 @@ date: 2025-05-04 10:15:00
 ---
 ## 1. Lỗ Hổng Server-Side Request Forgery(SSRF) Dẫn Đến Cache Poisoning
 
-Lỗ hổng Server-Side Request Forgery (SSRF) được phát hiện trong tham số `url` với chức năng `Proxy Controller`. Nguyên nhân là do ứng dụng thiếu cơ chế xác thực và ủy quyền hiệu quả, cho phép bất kỳ người dùng nào cũng có thể sử dụng chức năng này.
+Lỗ hổng Server-Side Request Forgery (SSRF) được phát hiện trong tham số `url` với chức năng [Proxy Controller](https://inappwebview.dev/docs/webview/proxy-controller/). Nguyên nhân là do ứng dụng thiếu cơ chế xác thực và ủy quyền hiệu quả, cho phép bất kỳ người dùng nào cũng có thể sử dụng chức năng này.
 
 Kẻ tấn công có thể lợi dụng lỗ hổng bằng cách cung cấp một domain tùy ý `(attacker domain)`, buộc máy chủ phải tương tác với các dịch vụ bên ngoài. Tuy nhiên, lỗ hổng này không thể được khai thác để truy cập các tài nguyên nội bộ của máy chủ (như localhost) do ứng dụng đã có bộ lọc `(filter)`.
 
@@ -144,3 +144,4 @@ Lỗ hổng này có thể dẫn đến tấn công Open Redirect, nghe có vẻ
 
 ## 7. Kết Luận
 Qua lỗ hổng này, chúng ta có thể thấy rằng một lỗ hổng tưởng chừng có mức độ nghiêm trọng thấp (P5) ban đầu lại có thể trở nên nguy hiểm hơn khi được kết hợp với một lỗi logic trong ứng dụng. Điều này nhấn mạnh tầm quan trọng của việc không chỉ tìm thấy lỗ hổng mà còn phải phân tích kỹ lưỡng cơ chế hoạt động của chúng để đánh giá đúng mức độ rủi ro.
+
