@@ -198,10 +198,10 @@ async function loadMarkdown() {
             .forEach((sec) => (sec.style.display = "block"));
         container.innerHTML = `<p style="color:red;">Không tìm thấy tệp.</p>`;
 
-        // ✂️ Xóa luôn section Read More
+        // Xóa luôn section Read More
         const oldRec2 = document.getElementById("recommendations");
         if (oldRec2) oldRec2.remove();
-        // ✂️ Ẩn <footer id="footer">
+        // Ẩn <footer id="footer">
         document.getElementById("footer").style.display = "none";
     }
 }
@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("scroll", scrollHandler);
     window.addEventListener("DOMContentLoaded", loadMarkdown);
 
-    // ✅ Xử lý nút đổi kích thước
+    // Xử lý nút đổi kích thước
     const toggleBtn = document.getElementById("toggleWidthBtn");
     if (toggleBtn) {
         toggleBtn.addEventListener("click", () => {
@@ -401,18 +401,31 @@ function createCategorySectionAtTop(category) {
     const h2 = document.createElement('h2');
     const ul = document.createElement('ul');
 
-    // Tạo slug và tiêu đề
+    // ==========================
+    // 1. Chọn icon random từ list
+    const randomIcons = ['', '', '', '', '', '', '', '', '', '', ''];
+    const randIcon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
+
+    // 2. Tạo slug và tiêu đề
     const titleText = formatCategoryTitle(category);
     const slug = slugify(titleText);
     h2.id = slug;
 
-    // Chỉ chèn text tiêu đề
+    // 3. Chèn icon random trước tiêu đề
+    const spanIcon = document.createElement('span');
+    spanIcon.textContent = randIcon;
+    spanIcon.style.marginRight = '0.5em';
+    h2.appendChild(spanIcon); // sẽ được prepend bên dưới
+
+    // 4. Chèn text tiêu đề
     h2.appendChild(document.createTextNode(titleText));
 
-    // Chèn icon link “🔗” ngay sau tiêu đề
+    // 5. Chèn icon link “🔗” ngay sau tiêu đề
     const copyIcon = createCopyLinkIcon(slug);
     h2.appendChild(copyIcon);
+    // ==========================
 
+    // bắt đầu từ đoạn này không được xoá, tính năng section để tự render ra post sau khi update bên posts.json
     ul.id = categoryToId(category);
 
     section.appendChild(h2);
@@ -449,70 +462,68 @@ function createCopyLinkIcon(slug) {
 
 // Hàm render chính
 async function renderPostLists() {
-        try {
-            const res = await fetch("/posts/posts.json", {
+    try {
+        const res = await fetch("/posts/posts.json", {
             cache: "no-store"
-            });
-            if (!res.ok) throw new Error("Không thể load posts.json");
-    
-            const posts = await res.json();
-            allPosts = posts;
-    
-            const categories = {
-                Bug_Bounty: "bugbounty-list",
-                CVE: "cve-list",
-                Private_Program: "privateprogram-list",
-                Direct_Collaboration: "directcollab-list",
-            };
-    
-            const createdDynamicSections = {};
-    
-            posts.forEach((post) => {
-                // --- THÊM ĐOẠN KIỂM TRA NÀY VÀO ĐÂY ---
-                // Nếu không có filename hoặc title, bỏ qua mục này
-                if (!post.filename || !post.title) {
-                    return;
-                }
-    
-                const category = post.category || "Uncategorized";
-                let listId = categories[category];
-    
-                // ... (phần code còn lại giữ nguyên)
-                if (!listId) {
-                    listId = categoryToId(category);
-                    if (!createdDynamicSections[listId]) {
-                        createCategorySectionAtTop(category);
-                        createdDynamicSections[listId] = true;
-                    }
-                }
-    
-                const targetList = document.getElementById(listId);
-                if (!targetList) return;
-    
-                const li = document.createElement("li");
-                const a = document.createElement("a");
-                a.href = `#${post.filename.replace(".md", "")}`;
-                a.classList.add("post-list-item");
-    
-                if (post.image) {
-                    const img = document.createElement("img");
-                    img.src = post.image;
-                    img.alt = post.title;
-                    img.classList.add("post-image");
-                    a.appendChild(img);
-    
-                    const title = document.createElement("h3");
-                    title.textContent = post.title;
-                    a.appendChild(title);
-                } else {
-                    a.textContent = post.title;
-                }
-    
-                li.appendChild(a);
-                targetList.appendChild(li);
-            });
-        } catch (err) {}
-    }
+        });
+        if (!res.ok) throw new Error("Không thể load posts.json");
+
+        const posts = await res.json();
+        allPosts = posts;
+
+        // ⚙️ Tự code UI riêng, tương ứng với id cố định bên index.html
+        const categories = {
+            Bug_Bounty: "bugbounty-list",
+            CVE: "cve-list",
+            Private_Program: "privateprogram-list",
+            Direct_Collaboration: "directcollab-list",
+        };
+
+        const createdDynamicSections = {};
+
+        posts.forEach((post) => {
+            const category = post.category || "Uncategorized";
+            let listId = categories[category];
+
+            // Nếu không thuộc category định nghĩa sẵn, thì tự tạo section mới (chỉ tạo 1 lần)
+            if (!listId) {
+                listId = categoryToId(category);
+                if (!createdDynamicSections[listId]) {
+                    createCategorySectionAtTop(category);
+                    createdDynamicSections[listId] = true;
+                }
+            }
+
+            const targetList = document.getElementById(listId);
+            if (!targetList) return; // Nếu listId không tồn tại trong DOM (vì bạn tự custom), bỏ qua
+
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            a.href = `#${post.filename.replace(".md", "")}`;
+            a.classList.add("post-list-item");
+
+            if (post.image) {
+                const img = document.createElement("img");
+
+                img.src = post.image;
+                img.alt = post.title;
+                img.classList.add("post-image");
+
+                a.appendChild(img);
+
+                const title = document.createElement("h3");
+                title.textContent = post.title;
+
+                a.appendChild(title);
+            } else {
+                a.textContent = post.title;
+            }
+
+            li.appendChild(a);
+            targetList.appendChild(li);
+        });
+    } catch (err) {}
+}
 
 // ---------------------------------------------------------------------------
 
