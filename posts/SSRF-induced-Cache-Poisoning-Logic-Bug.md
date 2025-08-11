@@ -125,17 +125,18 @@ Lỗ hổng này có thể dẫn đến tấn công Open Redirect, nghe có vẻ
 
 ## 5. Link Tham Khảo:
 
-`https://www.w3.org/TR/SVG11/`
+[https://www.w3.org/TR/SVG11/](https://www.w3.org/TR/SVG11/)
 
-`https://www.w3.org/TR/xhtml1/`
+[https://www.w3.org/TR/xhtml1/](https://www.w3.org/TR/xhtml1/)
 
-`https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Getting_Started#serving_svg`
+[https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Getting_Started#serving_svg](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Getting_Started#serving_svg)
 
-`https://portswigger.net/web-security/web-cache-poisoning`
+[https://portswigger.net/web-security/web-cache-poisoning](https://portswigger.net/web-security/web-cache-poisoning)
 
-`https://owasp.org/www-community/attacks/Server_Side_Request_Forgery`
+[https://owasp.org/www-community/attacks/Server_Side_Request_Forgery](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery)
 
 
 ## 6. Proof-of-Concept (POC) - Video
 
 ![](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/video.gif)
+
