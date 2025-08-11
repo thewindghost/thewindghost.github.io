@@ -15,7 +15,7 @@ Kẻ tấn công có thể lợi dụng lỗ hổng bằng cách cung cấp mộ
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/0.jpg)
 
-Vì lý do đó, `Bugcrowd` đã hạ mức độ nghiêm trọng của lỗ hổng xuống `P5 (Informational)`, chỉ mang tính chất thông tin thay vì là một rủi ro bảo mật nghiêm trọng.
+Vì lý do không thể gọi tài nguyên nội bộ của máy chủ (localhost) nên `Bugcrowd` đã hạ mức độ nghiêm trọng của lỗ hổng xuống `P5 (Informational)`, chỉ mang tính chất thông tin thay vì là một rủi ro bảo mật nghiêm trọng.
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/2.png)
 
@@ -34,7 +34,9 @@ Tuy nhiên, khi chuyển sang sử dụng `Content-Type: image/svg+xml`, server 
 
 Kết quả là, tôi đã tấn công Cache Poisoning thành công.
 
-Tuy nhiên, sau khi nghiên cứu sâu hơn, tôi nhận thấy lỗ hổng này mang tính chất Logic Bug Flaw. Cụ thể, server chỉ cho phép gửi yêu cầu đến một endpoint tối đa 3 lần. Sau 3 lần đó, cache sẽ được lưu lại vĩnh viễn. Khi người dùng khác truy cập vào endpoint này, server sẽ luôn phục vụ nội dung độc hại đã được lưu trong cache từ trước, thay vì xử lý yêu cầu mới. Đây chính là điểm yếu trong logic của ứng dụng.
+Tuy nhiên, sau khi nghiên cứu sâu hơn, tôi nhận thấy đây không phải là một lỗ hổng `Cache Poisoning` thông thường. Nó mang tính chất của một `Logic Bug Flaw`.
+
+Cụ thể, server được lập trình để chỉ cho phép gửi yêu cầu đến một endpoint tối đa 3 lần. Sau 3 lần đó, cache sẽ được lưu lại vĩnh viễn. Khi người dùng khác truy cập vào endpoint này, server sẽ luôn phục vụ nội dung độc hại đã được lưu từ trước, thay vì xử lý yêu cầu mới. Đây chính là điểm yếu trong logic của ứng dụng, không phải là một lỗi cấu hình đơn thuần.
 
 Lưu ý: Tôi đã sử dụng công cụ [requestrepo.com](https://requestrepo.com/) để chỉnh sửa các header trong quá trình thử nghiệm.
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/5.png)
@@ -140,3 +142,5 @@ Lỗ hổng này có thể dẫn đến tấn công Open Redirect, nghe có vẻ
 
 ![](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/video.gif)
 
+## 7. Kết Luận
+Qua lỗ hổng này, chúng ta có thể thấy rằng một lỗ hổng tưởng chừng có mức độ nghiêm trọng thấp (P5) ban đầu lại có thể trở nên nguy hiểm hơn khi được kết hợp với một lỗi logic trong ứng dụng. Điều này nhấn mạnh tầm quan trọng của việc không chỉ tìm thấy lỗ hổng mà còn phải phân tích kỹ lưỡng cơ chế hoạt động của chúng để đánh giá đúng mức độ rủi ro.
