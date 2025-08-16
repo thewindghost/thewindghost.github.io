@@ -1,5 +1,5 @@
 ---
-date: 2025-05-04 10:15:00
+date: 2025-08-14 10:15:00 AM
 ---
 
 # SSRF-induced Cache Poisoning Logic Bug Flaw
@@ -144,4 +144,5 @@ Lỗ hổng này có thể dẫn đến tấn công Open Redirect, nghe có vẻ
 
 ## 7. Kết Luận
 Qua lỗ hổng này, chúng ta có thể thấy rằng một lỗ hổng tưởng chừng có mức độ nghiêm trọng thấp (P5) ban đầu lại có thể trở nên nguy hiểm hơn khi được kết hợp với một lỗi logic trong ứng dụng. Điều này nhấn mạnh tầm quan trọng của việc không chỉ tìm thấy lỗ hổng mà còn phải phân tích kỹ lưỡng cơ chế hoạt động của chúng để đánh giá đúng mức độ rủi ro.
+
 
