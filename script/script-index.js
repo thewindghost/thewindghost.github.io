@@ -112,7 +112,6 @@ async function loadMarkdown() {
     const file = getPostFromURL();
     const main = document.querySelector("main");
 
-    // ——— Nếu không có hash hoặc hash không định nghĩa file => ẩn nội dung và footer ———
     if (!file) {
         if (main) main.style.display = "none";
         if (toc) toc.style.display = "none";
@@ -123,10 +122,8 @@ async function loadMarkdown() {
             .forEach((sec) => (sec.style.display = "block"));
         container.innerHTML = "";
 
-        // ✂️ Xóa luôn section Read More
         const oldRec = document.getElementById("recommendations");
         if (oldRec) oldRec.remove();
-        // ✂️ Ẩn <footer id="footer">
         document.getElementById("footer").style.display = "none";
 
         return;
@@ -148,7 +145,7 @@ async function loadMarkdown() {
 
         if (metadata.date) {
             const dt = new Date(metadata.date);
-            postTime.textContent = `Last update: ${dt.toLocaleString()}`;
+            postTime.textContent = `Last Update: ${dt.toLocaleString()}`;
             postTime.style.display = "block";
         } else {
             postTime.style.display = "none";
@@ -314,8 +311,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Cập nhật text của nút
             toggleBtn.textContent = isFocus ?
-                "🔙 Exit full screen mode" :
-                "🖥️ Full Screen";
+                "Exit full screen mode" :
+                "Full Screen";
 
             // Ẩn hoặc hiện TOC tùy vào chế độ focus mode
             if (toc) {
@@ -471,7 +468,6 @@ async function renderPostLists() {
         const posts = await res.json();
         allPosts = posts;
 
-        // ⚙️ Tự code UI riêng, tương ứng với id cố định bên index.html
         const categories = {
             Bug_Bounty: "bugbounty-list",
             CVE: "cve-list",
@@ -618,4 +614,5 @@ if (footer && toc && toc.style.display !== "none") {
 } else if (footer) {
     footer.style.display = "none";
 }
+
 
