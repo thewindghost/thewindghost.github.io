@@ -1,5 +1,5 @@
 ---
-date: 2025-05-04 10:15:00
+date: 2025-08-14 10:15:00 AM
 ---
 
 # SSRF-induced Cache Poisoning Logic Bug Flaw
