@@ -148,7 +148,7 @@ async function loadMarkdown() {
 
         if (metadata.date) {
             const dt = new Date(metadata.date);
-            postTime.textContent = `Posted on: ${dt.toLocaleString()}`;
+            postTime.textContent = `Last update: ${dt.toLocaleString()}`;
             postTime.style.display = "block";
         } else {
             postTime.style.display = "none";
@@ -618,3 +618,4 @@ if (footer && toc && toc.style.display !== "none") {
 } else if (footer) {
     footer.style.display = "none";
 }
+
