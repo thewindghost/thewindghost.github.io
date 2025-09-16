@@ -6,7 +6,7 @@ date: 2025-08-14 10:15:00 AM
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/1.jpg)
 
-## **TL;DR:** 
+## **TL;DR** 
 Lỗ hổng SSRF ban đầu bị đánh giá thấp (P5) do có bộ lọc chặn truy cập tài nguyên nội bộ. Tuy nhiên, khi kết hợp với một lỗi logic trong cơ chế xử lý Cache của Server (lưu Cache 1 năm sau 3 lần gọi), kẻ tấn công đã lợi dụng **XML Injection** để chèn nội dung độc hại (một tệp SVG chứa thẻ meta HTML chuyển hướng) vào bộ nhớ Cache. Điều này dẫn đến một cuộc tấn công **Open Redirect** hàng loạt, cho thấy lỗ hổng tưởng chừng vô hại lại có thể trở nên rất nguy hiểm khi kết hợp với lỗi logic của ứng dụng.
 
 ### **Tóm tắt chuỗi lỗ hổng (Vulnerability Chain)**
@@ -152,5 +152,6 @@ Lỗ hổng này có thể dẫn đến tấn công Open Redirect, nghe có vẻ
 
 ## 7. Kết Luận
 Qua lỗ hổng này, chúng ta có thể thấy rằng một lỗ hổng tưởng chừng có mức độ nghiêm trọng thấp (P5) ban đầu lại có thể trở nên nguy hiểm hơn khi được kết hợp với một lỗi logic trong ứng dụng. Điều này nhấn mạnh tầm quan trọng của việc không chỉ tìm thấy lỗ hổng mà còn phải phân tích kỹ lưỡng cơ chế hoạt động của chúng để đánh giá đúng mức độ rủi ro.
+
 
 
