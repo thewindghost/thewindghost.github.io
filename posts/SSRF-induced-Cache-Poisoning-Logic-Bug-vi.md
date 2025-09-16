@@ -6,8 +6,17 @@ date: 2025-08-14 10:15:00 AM
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/1.jpg)
 
+### **TL;DR:** Lỗ hổng SSRF ban đầu bị đánh giá thấp (P5) do có bộ lọc chặn truy cập tài nguyên nội bộ. Tuy nhiên, khi kết hợp với một lỗi logic trong cơ chế xử lý Cache của Server (lưu Cache 1 năm sau 3 lần gọi), kẻ tấn công đã lợi dụng **XML Injection** để chèn nội dung độc hại (một tệp SVG chứa thẻ meta HTML chuyển hướng) vào bộ nhớ Cache. Điều này dẫn đến một cuộc tấn công **Open Redirect** hàng loạt, cho thấy lỗ hổng tưởng chừng vô hại lại có thể trở nên rất nguy hiểm khi kết hợp với lỗi logic của ứng dụng.
+
+### **Tóm tắt chuỗi lỗ hổng (Vulnerability Chain)**
+- SSRF (Server-Side Request Forgery): Lợi dụng chức năng Proxy Controller để buộc server tương tác với dịch vụ bên ngoài.
+
+- XML Injection: Sử dụng file SVG (định dạng XML) để chèn nội dung HTML độc hại vào phản hồi của server.
+
+- Variant Cache Poisoning: Tận dụng lỗi logic của server để lưu vĩnh viễn nội dung độc hại đã được chèn vào bộ nhớ cache, từ đó tấn công hàng loạt người dùng.
+
 ---
-## 1. Lỗ Hổng Server-Side Request Forgery(SSRF) Dẫn Đến Cache Poisoning
+## 1. Lỗ Hổng Server-Side Request Forgery(SSRF) Dẫn Đến Variant Cache Poisoning
 
 Lỗ hổng Server-Side Request Forgery (SSRF) được phát hiện trong tham số `url` với chức năng [Proxy Controller](https://inappwebview.dev/docs/webview/proxy-controller/). Nguyên nhân là do ứng dụng thiếu cơ chế xác thực và ủy quyền hiệu quả, cho phép bất kỳ người dùng nào cũng có thể sử dụng chức năng này.
 
@@ -20,9 +29,9 @@ Vì lý do không thể gọi tài nguyên nội bộ của máy chủ (localhos
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/2.png)
 
 ---
-## 2. Lỗ Hổng Cache Poisoning 
+## 2. Lỗ Hổng Variant Cache Poisoning
 
-Lỗ hổng Cache Poisoning được phát hiện qua phản hồi của server. Các header như `X-Cache: Hit from CloudFront` và `Age: 5` cùng với `Status 200 OK` cho thấy server đang sử dụng CDN (Content Delivery Network) và nội dung đang được cache.
+Lỗ hổng Variant Cache Poisoning được phát hiện qua phản hồi của server. Các header như `X-Cache: Hit from CloudFront` và `Age: 5` cùng với `Status 200 OK` cho thấy server đang sử dụng CDN (Content Delivery Network) và nội dung đang được cache.
 
 Ban đầu, khi thử thay đổi `Content-Type` trong header của server độc hại thành `text/html`, server trả về `Status 400 Bad Request` vì không chấp nhận loại nội dung này.
 
@@ -30,13 +39,13 @@ Ban đầu, khi thử thay đổi `Content-Type` trong header của server độ
 
 Tuy nhiên, khi chuyển sang sử dụng `Content-Type: image/svg+xml`, server đã phản hồi với `Status 200 OK`. Điều này chứng tỏ server chấp nhận và xử lý thành công loại nội dung này, mở ra khả năng khai thác lỗ hổng.
 
+Kết quả là, tôi đã tấn công **Variant Cache Poisoning** thành công. Lỗ hổng này đặc biệt nguy hiểm vì nó cho phép tôi thực hiện một cuộc tấn công **XML Injection** để chèn nội dung HTML độc hại vào file SVG. Mã HTML này sau đó được lưu vào bộ nhớ cache, tạo tiền đề cho các cuộc tấn công tiếp theo.
+
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/3.jpg)
 
-Kết quả là, tôi đã tấn công Cache Poisoning thành công.
+Sau khi nghiên cứu sâu hơn, tôi nhận thấy đây không phải là một lỗ hổng `Cache Poisoning` thông thường. Nó mang tính chất của một `Logic Bug Flaw`.
 
-Tuy nhiên, sau khi nghiên cứu sâu hơn, tôi nhận thấy đây không phải là một lỗ hổng `Cache Poisoning` thông thường. Nó mang tính chất của một `Logic Bug Flaw`.
-
-Cụ thể, server được lập trình để chỉ cho phép gửi yêu cầu đến một endpoint tối đa 3 lần. Sau 3 lần đó, cache sẽ được lưu lại vĩnh viễn. Khi người dùng khác truy cập vào endpoint này, server sẽ luôn phục vụ nội dung độc hại đã được lưu từ trước, thay vì xử lý yêu cầu mới. Đây chính là điểm yếu trong logic của ứng dụng, không phải là một lỗi cấu hình đơn thuần.
+Cụ thể, Server được lập trình để chỉ cho phép gửi yêu cầu đến một Endpoint tối đa 3 lần. Sau 3 lần đó, cache sẽ được lưu lại 1 năm. Khi người dùng khác truy cập vào Endpoint này, Server sẽ luôn phục vụ nội dung độc hại đã được lưu từ trước, thay vì xử lý yêu cầu mới. Đây chính là điểm yếu trong Logic của ứng dụng, không phải là một lỗi cấu hình đơn thuần, vì vậy tôi sẽ gọi nó là **Variant Cache Poisoning** cho hợp lý và tránh gây tranh cãi hoặc hiểu nhầm lỗ hổng với 1 số người đọc không hết bài viết vì quá dài.
 
 Lưu ý: Tôi đã sử dụng công cụ [requestrepo.com](https://requestrepo.com/) để chỉnh sửa các header trong quá trình thử nghiệm.
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/5.png)
@@ -46,7 +55,7 @@ Lưu ý: Tôi đã sử dụng công cụ [requestrepo.com](https://requestrepo.
 
 ### Tác Động (Impact)
 
-Mặc dù lỗ hổng `Cache Poisoning` cho phép kẻ tấn công chèn nội dung độc hại vào bộ nhớ `cache`, nhưng việc khai thác trực tiếp để thực hiện `XSS Stored` đã bị chặn bởi chính sách bảo mật nội dung `CSP (Content Security Policy)` của hệ thống. Vì vậy, tôi đã chuyển hướng nghiên cứu để tìm một kịch bản tấn công khác khả thi hơn.
+Mặc dù lỗ hổng `Variant Cache Poisoning` cho phép kẻ tấn công chèn nội dung độc hại vào bộ nhớ `cache`, nhưng việc khai thác trực tiếp để thực hiện `XSS Stored` đã bị chặn bởi chính sách bảo mật nội dung `CSP (Content Security Policy)` của hệ thống. Vì vậy, tôi đã chuyển hướng nghiên cứu để tìm một kịch bản tấn công khác khả thi hơn.
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/8.png)
 
@@ -132,8 +141,6 @@ Lỗ hổng này có thể dẫn đến tấn công Open Redirect, nghe có vẻ
 [https://www.w3.org/TR/xhtml1/](https://www.w3.org/TR/xhtml1/)
 
 [https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Getting_Started#serving_svg](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Getting_Started#serving_svg)
-
-[https://portswigger.net/web-security/web-cache-poisoning](https://portswigger.net/web-security/web-cache-poisoning)
 
 [https://owasp.org/www-community/attacks/Server_Side_Request_Forgery](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery)
 
