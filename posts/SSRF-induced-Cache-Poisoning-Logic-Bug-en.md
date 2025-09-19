@@ -14,7 +14,8 @@ An initial Server-Side Request Forgery (SSRF) vulnerability was underrated (P5) 
 
 - XML Injection: Using an SVG file (an XML format) to inject malicious HTML content into the server's response.
 
-- Variant Cache Poisoning: Leveraging a server's logic bug to permanently cache the injected malicious content, thereby launching a large-scale attack on users.
+- Variant Cache Poisoning: The attacker makes three requests to the vulnerable server's endpoint, which fetches the malicious SVG file from the attacker's server. The server's logic bug then caches this malicious content for one year.
+- Open Redirect Attack: After the content is cached, any subsequent user who accesses the same endpoint is automatically served the cached malicious SVG file, causing their browser to redirect them to the attacker's specified URL.
 
 ---
 ## 1. Server-Side Request Forgery (SSRF) Vulnerability Leading to Variant Cache Poisoning
