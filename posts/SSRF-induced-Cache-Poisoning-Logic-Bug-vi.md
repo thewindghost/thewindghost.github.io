@@ -14,7 +14,9 @@ Lỗ hổng SSRF ban đầu bị đánh giá thấp (P5) do có bộ lọc chặ
 
 - XML Injection: Sử dụng file SVG (định dạng XML) để chèn nội dung HTML độc hại vào phản hồi của server.
 
-- Variant Cache Poisoning: Tận dụng lỗi logic của server để lưu nội dung độc hại đã được chèn vào bộ nhớ cache, từ đó tấn công hàng loạt người dùng.
+- Variant Cache Poisoning: Kẻ tấn công thực hiện ba yêu cầu đến điểm cuối của máy chủ dễ bị tấn công, yêu cầu này sẽ lấy tệp SVG độc hại từ máy chủ của kẻ tấn công. Lỗi Logic của máy chủ sau đó sẽ lưu trữ nội dung độc hại này trong bộ nhớ đệm trong một năm.
+
+- Open Redirect Attack: Sau khi nội dung được lưu vào bộ nhớ đệm, bất kỳ người dùng nào truy cập vào cùng điểm cuối đó sẽ tự động được cung cấp tệp SVG độc hại đã lưu vào bộ nhớ đệm, khiến trình duyệt của họ chuyển hướng đến URL do kẻ tấn công chỉ định.
 
 ---
 ## 1. Lỗ Hổng Server-Side Request Forgery(SSRF) Dẫn Đến Variant Cache Poisoning
@@ -152,6 +154,7 @@ Lỗ hổng này có thể dẫn đến tấn công Open Redirect, nghe có vẻ
 
 ## 7. Kết Luận
 Qua lỗ hổng này, chúng ta có thể thấy rằng một lỗ hổng tưởng chừng có mức độ nghiêm trọng thấp (P5) ban đầu lại có thể trở nên nguy hiểm hơn khi được kết hợp với một lỗi logic trong ứng dụng. Điều này nhấn mạnh tầm quan trọng của việc không chỉ tìm thấy lỗ hổng mà còn phải phân tích kỹ lưỡng cơ chế hoạt động của chúng để đánh giá đúng mức độ rủi ro.
+
 
 
 
