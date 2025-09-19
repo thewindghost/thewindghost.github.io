@@ -135,7 +135,7 @@ Priority: u=0, i
 
 ### Notes about the vulnerability
 
-This vulnerability can lead to Open Redirect attacks; it may sound low-impact, but the issue is that the payload can become permanently stored in cache. Consequently, every user who accesses that endpoint will be redirected, resulting in a large-scale attack.
+This vulnerability can lead to Open Redirect attacks, which may sound low-impact, but the issue is that the payload is cached for 1 year. Consequently, every user who accesses that endpoint will be redirected, resulting in a large-scale attack.
 
 ![alt text](https://mermaid.ink/img/pako\:eNp9km9vmzAQxr-KdVPe0SzkH5QXkxKyptpSaWqidBr0hQMXsGpsZsyUNOK7z5i2o9M0v7rz73nuTj5fIJEpQgCDwYUJpgNyiQUhMegcC4whMGGKR1pzHYPTQ3uqGD1wrFqN9bToKIXesucXozsvTy-uV_iALMt1hw-Spz2s8aRDyaXq6IeRPT0BZwL_K8A0ww09IF_S5ClTshamfmCUR3tiaIVNLJpmMIhFpmiZk819e7mI9izZseKRXF19Il-ie_xZY6W7dBmFXNbpjTLzP7bqz9FCa9MCVSf4Gt1RzhIm64q8c4atetmF0RbVL1RkX3OBih4YZ_psy4Vdlz_hKvqm5OlMblAnOVlRTa1uZeFtr1lX0sJbC9c9GJpxUWiy3a8_fr_bWNX677F270avSikqtMqdxQtwIFMshUCrGh0oUBW0TeEf34Sqp_aJG-MpqfghZfFqM6vIcgiOlFcmq8uUalwxajZQvN0qFCmq0CxNQzB1fVsEggucIPDd4dz3pvPpyJt57rU7c-AMwWQ8Hk7nnjsZ-7OJe-15jQPPtuto6Huz5jcMZeBn)
 
@@ -145,11 +145,9 @@ This vulnerability can lead to Open Redirect attacks; it may sound low-impact, b
 
 [https://www.w3.org/TR/xhtml1/](https://www.w3.org/TR/xhtml1/)
 
-[https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Getting\_Started#serving\_svg](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Getting_Started#serving_svg)
+[https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Getting_Started#serving_svg](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Getting_Started#serving_svg)
 
-[https://portswigger.net/web-security/web-cache-poisoning](https://portswigger.net/web-security/web-cache-poisoning)
-
-[https://owasp.org/www-community/attacks/Server\_Side\_Request\_Forgery](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery)
+[https://owasp.org/www-community/attacks/Server_Side_Request_Forgery](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery)
 
 ## 6. Proof-of-Concept (POC) - Video
 
