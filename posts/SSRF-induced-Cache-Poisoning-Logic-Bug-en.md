@@ -6,77 +6,83 @@ date: 2025-08-14 10:15:00 AM
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/1.jpg)
 
+## **TL;DR**
+An initial Server-Side Request Forgery (SSRF) vulnerability was underrated (P5) due to a filter that blocked internal resource access. However, when combined with a logic bug in the server's cache mechanism (caching for 1 year after 3 calls), the attacker leveraged **XML Injection** to embed malicious content (an SVG file with a redirecting HTML meta tag) into the cache. This led to a large-scale **Open Redirect** attack, demonstrating how a seemingly harmless vulnerability can become very dangerous when combined with an application's logic flaw.
+
+### **Vulnerability Chain Summary**
+- SSRF (Server-Side Request Forgery): Exploiting the Proxy Controller function to force the server to interact with an external service.
+
+- XML Injection: Using an SVG file (an XML format) to inject malicious HTML content into the server's response.
+
+- Variant Cache Poisoning: Leveraging a server's logic bug to permanently cache the injected malicious content, thereby launching a large-scale attack on users.
+
 ---
+## 1. Server-Side Request Forgery (SSRF) Vulnerability Leading to Variant Cache Poisoning
 
-## 1. Server-Side Request Forgery (SSRF) Leading to Cache Poisoning
+The Server-Side Request Forgery (SSRF) vulnerability was discovered in the `url` parameter of the [Proxy Controller](https://inappwebview.dev/docs/webview/proxy-controller/) function. The root cause was the application's lack of effective authentication and authorization mechanisms, which allowed any user to utilize this function.
 
-A Server-Side Request Forgery (SSRF) vulnerability was identified in the `url` parameter of the [Proxy Controller](https://inappwebview.dev/docs/webview/proxy-controller/). The root cause is the application’s lack of effective authentication and authorization controls, which allows any user to invoke this functionality.
-
-An attacker can exploit this flaw by supplying an arbitrary domain (attacker-controlled domain), causing the server to interact with external services. However, this vulnerability could not be leveraged to access internal server resources (such as `localhost`) because the application implements a filtering mechanism (`filter`).
+An attacker could exploit this vulnerability by providing an arbitrary domain (`attacker domain`), forcing the server to interact with external services. However, this vulnerability couldn't be exploited to access the server's internal resources (like localhost) because the application had a filter in place.
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/0.jpg)
 
-Because calling internal server resources (localhost) was not possible, `Bugcrowd` downgraded the severity to `P5 (Informational)`, categorizing it as informational rather than a high-risk security issue.
+Because it was not possible to call internal server resources (localhost), `Bugcrowd` downgraded the severity of the vulnerability to `P5 (Informational)`, considering it only as an informational finding rather than a serious security risk.
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/2.png)
 
 ---
+## 2. Variant Cache Poisoning Vulnerability
 
-## 2. Cache Poisoning Vulnerability
+The Variant Cache Poisoning vulnerability was discovered through the server's response. Headers like `X-Cache: Hit from CloudFront` and `Age: 5` along with `Status 200 OK` indicated that the server was using a CDN (Content Delivery Network) and the content was being cached.
 
-The cache poisoning issue was discovered by analyzing server responses. Headers such as `X-Cache: Hit from CloudFront` and `Age: 5`, together with `Status 200 OK`, indicate that the server uses a CDN (Content Delivery Network) and that content is being cached.
-
-Initially, when I attempted to change the server’s `Content-Type` header to `text/html`, the server returned `Status 400 Bad Request`, as it did not accept that content type.
+Initially, when I tried changing the `Content-Type` in the malicious server's header to `text/html`, the server returned a `Status 400 Bad Request` because it didn't accept this content type.
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/4.jpg)
 
-However, when switching to `Content-Type: image/svg+xml`, the server responded with `Status 200 OK`. This demonstrates that the server accepts and successfully processes this content type, which opens the possibility for exploitation.
+However, when I switched to using `Content-Type: image/svg+xml`, the server responded with `Status 200 OK`. This proved that the server successfully accepted and processed this content type, opening up an exploitation possibility.
+
+As a result, I successfully performed a **Variant Cache Poisoning** attack. This vulnerability is especially dangerous because it allowed me to execute an **XML Injection** attack to embed malicious HTML content into an SVG file. This HTML code was then stored in the cache, setting the stage for subsequent attacks.
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/3.jpg)
 
-As a result, I successfully performed cache poisoning.
+Upon further investigation, I realized this wasn't a typical `Cache Poisoning` vulnerability. It was a `Logic Bug Flaw`.
 
-After deeper analysis, I concluded this is not a typical `Cache Poisoning` vulnerability but rather a `Logic Bug Flaw`.
+Specifically, the server was programmed to only allow requests to an Endpoint a maximum of 3 times. After 3 times, the cache would be stored for 1 year. When another user accesses this Endpoint, the server will always serve the malicious content that was previously cached, instead of processing a new request. This is the weakness in the application's logic, not a simple configuration error, so I will call it **Variant Cache Poisoning** to be more accurate and avoid confusing or misleading some readers who don't read the whole article because it's too long.
 
-Specifically, the server is programmed to allow requests to a given endpoint up to a maximum of three times. After these three requests, the cache becomes permanently stored. When subsequent users access this endpoint, the server always serves the previously cached malicious content instead of processing the new request. This is a weakness in the application logic rather than a simple configuration error.
-
-Note: I used the tool [requestrepo.com](https://requestrepo.com/) to edit headers during testing.
+Note: I used the tool [requestrepo.com](https://requestrepo.com/) to modify headers during the testing process.
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/5.png)
 
 ---
-
 ## 3. Impact & Attack Scenario
 
 ### Impact
 
-Although the cache poisoning vulnerability allows an attacker to inject malicious content into the cache, direct exploitation to achieve Stored XSS was mitigated by the system’s `CSP (Content Security Policy)`. Therefore, I shifted the investigation to a different, feasible attack scenario.
+Although the `Variant Cache Poisoning` vulnerability allowed the attacker to inject malicious content into the `cache`, direct exploitation to perform `XSS Stored` was blocked by the system's `CSP (Content Security Policy)`. Therefore, I redirected my research to find another more feasible attack scenario.
 
 ![alt text](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/8.png)
 
-After analysis, I found that the ability to inject HTML can be abused to perform an Open Redirect by leveraging a `meta` tag.
+After analysis, I realized it was possible to leverage the ability to inject HTML content to cause an **Open Redirect** attack by using a `meta tag`.
 
 ### Attack Scenario
 
-To demonstrate this scenario, I set up an attacker-controlled server to log incoming requests.
+To demonstrate this scenario, I set up a malicious server to log access attempts.
 
-I created a file `poc.xml` on the attacker server with the following content:
+I created a `poc.xml` file on the malicious server with the following content:
 
 `poc.xml`
-
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" version="1.1">
   <foreignObject width="100%" height="100%">
-    <body xmlns="http://www.w3.org/1999/xhtml">
-      <meta http-equiv="refresh" content="0; url=https://wcc9fwntbs9o7upj4haqmnxi0960uqif.oastify.com/" />
+    <body xmlns="[http://www.w3.org/1999/xhtml](http://www.w3.org/1999/xhtml)">
+      <meta http-equiv="refresh" content="0; url=[https://wcc9fwntbs9o7upj4haqmnxi0960uqif.oastify.com/](https://wcc9fwntbs9o7upj4haqmnxi0960uqif.oastify.com/)" />
     </body>
   </foreignObject>
 </svg>
 ```
 
-This file is an `SVG (an XML format)` containing a `<foreignObject>` element that allows embedding HTML. Because of the `namespace http://www.w3.org/1999/xhtml`, the `<meta http-equiv="refresh">` tag is processed by the user’s browser and causes an automatic redirect to an attacker-specified URL.
+This file is actually an `SVG (a form of XML)` containing a `<foreignObject>` tag, which allows embedding HTML content. Thanks to the `http://www.w3.org/1999/xhtml` namespace, the `<meta http-equiv="refresh">` tag will be processed by the user's browser, forcing them to automatically redirect to a URL specified by the attacker.
 
-### Exploitation steps:
+### Exploitation Process:
 
 1. I set up a malicious server using Flask to serve the `poc.xml` file with the `Content-Type: image/svg+xml` header.
 
