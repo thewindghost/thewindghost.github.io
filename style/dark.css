@@ -220,20 +220,6 @@ ul li a {
 	transition: color 0.2s ease;
 }
 
-.site-footer {
-	text-align: center;
-	font-size: 0.9em;
-	color: #00ff95;
-	margin-top: 4em;
-	padding: 2em 1em 1em;
-}
-
-.site-footer hr {
-	margin-bottom: 1em;
-	border: none;
-	border-top: 1px solid #ccc;
-}
-
 .post-image {
 	display: block;
 	margin-bottom: 0.75em;
@@ -267,3 +253,4 @@ ul li a {
 	margin-bottom: 2rem;
 
 }
+
