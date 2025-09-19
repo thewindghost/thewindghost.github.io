@@ -214,22 +214,6 @@ ul li a:hover {
 	border-radius: 4px;
 }
 
-/* === Footer === */
-
-.site-footer {
-	text-align: center;
-	font-size: 0.9em;
-	color: #ff6600;
-	margin-top: 4em;
-	padding: 2em 1em 1em;
-}
-
-.site-footer hr {
-	margin-bottom: 1em;
-	border: none;
-	border-top: 1px solid #ccc;
-}
-
 
 /* chỉnh kích thước image ở index.html */
 .post-image {
@@ -264,3 +248,4 @@ ul li a:hover {
 #recommendations {
 	margin-bottom: 2rem;
 }
+
