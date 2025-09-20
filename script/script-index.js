@@ -494,10 +494,9 @@ function toggleBackButton() {
 // ---------------------------------------------------------------------------
 
 // 10. Khởi chạy lần đầu
-document.addEventListener("DOMContentLoaded", () => {
-    renderPostLists().then(() => {
-        loadMarkdown(); // Gọi sau khi danh sách load xong
-    });
+document.addEventListener("DOMContentLoaded", async () => {
+    await renderPostLists();
+    loadMarkdown(); // Gọi sau khi danh sách load xong
 
     window.addEventListener("scroll", scrollHandler);
     
