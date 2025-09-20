@@ -11,8 +11,6 @@ const tocList =
 
 const postTime = document.getElementById("post-time");
 
-// ---------------------------------------------------------------------------
-
 // Biến toàn cục lưu danh sách posts
 let allPosts = [];
 
@@ -24,9 +22,7 @@ function getRandomRecommendations(currentSlug, count = 3) {
     return others.sort(() => Math.random() - 0.5).slice(0, count);
 }
 
-// ---------------------------------------------------------------------------
-
-// Render khuyến nghị dưới footer (thủ công, không innerHTML)
+// Render khuyến nghị dưới footer
 function renderRecommendations(currentSlug) {
     const recs = getRandomRecommendations(currentSlug);
     const footer = document.getElementById("footer");
@@ -56,8 +52,6 @@ function renderRecommendations(currentSlug) {
     footer.appendChild(sec);
 }
 
-// ---------------------------------------------------------------------------
-
 // Đảm bảo có container cho Markdown
 function ensureMarkdownContainer() {
     let container = document.getElementById("markdown-content");
@@ -71,26 +65,20 @@ function ensureMarkdownContainer() {
     return container;
 }
 
-// ---------------------------------------------------------------------------
-
-// 2. Chuyển theme và lưu vào localStorage
+// Chuyển theme và lưu vào localStorage
 function switchTheme(cssFile) {
     themeLink.setAttribute("href", cssFile);
     localStorage.setItem("theme", cssFile);
 }
 
-// ---------------------------------------------------------------------------
-
-// 3. Lấy tên bài viết từ hash (#exploit => exploit.md)
+// Lấy tên bài viết từ hash
 function getPostFromURL() {
     const hash = window.location.hash;
     const postName = hash ? hash.substring(1) : null;
     return postName ? `/posts/${postName}.md` : null;
 }
 
-// ---------------------------------------------------------------------------
-
-// Wait for libraries to be loaded
+// Wait for libraries
 function waitForLibraries() {
     return new Promise((resolve) => {
         const checkLibraries = () => {
@@ -104,18 +92,14 @@ function waitForLibraries() {
     });
 }
 
-// ---------------------------------------------------------------------------
-
-// 4. Load Markdown từ file .md
-async function loadMarkdown() {
-    // Phục hồi theme đã lưu
+// Load Markdown từ file .md
+function loadMarkdown() {
+    // Không async ở đây để tránh lỗi
     const saved = localStorage.getItem("theme");
     if (saved) themeLink.href = saved;
 
-    // Chuẩn bị toggleWidthBtn và toc
     const toggleBtn = document.getElementById("toggleWidthBtn");
     const toc = document.getElementById("toc");
-
     const container = ensureMarkdownContainer();
     if (!container) return;
 
@@ -123,12 +107,11 @@ async function loadMarkdown() {
     const main = document.querySelector("main");
 
     if (!file) {
-        // Không có bài viết - hiện danh sách, ẩn nội dung bài
+        // Không có bài viết - hiện danh sách
         if (main) main.style.display = "none";
         if (toc) toc.style.display = "none";
         if (toggleBtn) toggleBtn.style.display = "none";
 
-        // Hiện tất cả sections trong section-container
         document.querySelectorAll(".section-container section").forEach((sec) => {
             sec.style.display = "block";
         });
@@ -137,27 +120,27 @@ async function loadMarkdown() {
         const oldRec = document.getElementById("recommendations");
         if (oldRec) oldRec.remove();
         document.getElementById("footer").style.display = "none";
-
         return;
     }
 
-    // Wait for libraries but don't block if they're already loaded
-    if (!window.marked || !window.DOMPurify) {
-        await waitForLibraries();
-    }
+    // Load bài viết async
+    loadPost(file, container, main, toc, toggleBtn);
+}
 
+// Hàm async riêng để load post
+async function loadPost(file, container, main, toc, toggleBtn) {
     try {
-        // Hiện nút điều chỉnh kích cỡ nếu có bài
+        // Wait for libraries
+        if (!window.marked || !window.DOMPurify) {
+            await waitForLibraries();
+        }
+
         if (toggleBtn) toggleBtn.style.display = "inline-block";
 
-        // security cache poisoning
-        const res = await fetch(file, {
-            cache: "no-store"
-        });
-        if (!res.ok) throw new Error(`File not found`);
+        const res = await fetch(file, { cache: "no-store" });
+        if (!res.ok) throw new Error("File not found");
         const md = await res.text();
 
-        // 4.1. Parse YAML front-matter
         const { metadata, content } = extractFrontMatter(md);
 
         if (metadata.date) {
@@ -168,7 +151,6 @@ async function loadMarkdown() {
             postTime.style.display = "none";
         }
 
-        // 4.2. Render Markdown content
         const html = marked.parse(content);
         const safe = DOMPurify.sanitize(html);
 
@@ -177,48 +159,40 @@ async function loadMarkdown() {
         container.classList.remove("full-width");
         generateTOC();
 
-        // Chèn post footer (Read More)
         const currentSlug = window.location.hash.substring(1);
         renderRecommendations(currentSlug);
 
         if (window.Prism) Prism.highlightAll();
 
-        // Có bài viết: hiện bài, hiện toc, ẩn list sections
         if (main) main.style.display = "block";
         if (toc) toc.style.display = "block";
 
-        // Hiển thị footer chính chứa Read More
         const footerEl = document.getElementById("footer");
-        if (footerEl) {
-            footerEl.style.display = "block";
-        }
+        if (footerEl) footerEl.style.display = "block";
 
-        // Ẩn tất cả các section list bài khi đang xem bài
         document.querySelectorAll(".section-container section").forEach((sec) => {
             sec.style.display = "none";
         });
 
     } catch (err) {
-        // Khi file không tồn tại hoặc lỗi fetch - quay về trang chủ
+        console.error("Error loading post:", err);
+        
         if (main) main.style.display = "none";
         if (toc) toc.style.display = "none";
         if (toggleBtn) toggleBtn.style.display = "none";
 
-        // Hiện lại danh sách bài
         document.querySelectorAll(".section-container section").forEach((sec) => {
             sec.style.display = "block";
         });
         container.innerHTML = `<p style="color:red;">Không tìm thấy tệp.</p>`;
 
-        // Xóa luôn section Read More
-        const oldRec2 = document.getElementById("recommendations");
-        if (oldRec2) oldRec2.remove();
+        const oldRec = document.getElementById("recommendations");
+        if (oldRec) oldRec.remove();
+        document.getElementById("footer").style.display = "none";
     }
 }
 
-// ---------------------------------------------------------------------------
-
-// 5. Tạo TOC (Table of Contents)
+// Tạo TOC
 function generateTOC() {
     if (!tocList) return;
     tocList.innerHTML = "";
@@ -244,9 +218,7 @@ function generateTOC() {
     });
 }
 
-// ---------------------------------------------------------------------------
-
-// 6. Biến heading → id friendly
+// Slugify text
 function slugify(text) {
     return text
         .toString()
@@ -257,9 +229,7 @@ function slugify(text) {
         .replace(/\-\-+/g, "-");
 }
 
-// ---------------------------------------------------------------------------
-
-// 7. Hiện nút scroll to top nếu scroll xuống
+// Scroll handlers
 function scrollHandler() {
     const btn = document.getElementById("scrollToTop");
     if (!btn) return;
@@ -274,9 +244,7 @@ function scrollToTop() {
     });
 }
 
-// ---------------------------------------------------------------------------
-
-// 8. Click vào TOC thì scroll đến tiêu đề
+// TOC click handler
 document.addEventListener("click", function(e) {
     if (e.target.tagName === "A" && e.target.closest("#toc")) {
         const targetId = e.target.getAttribute("href").substring(1);
@@ -292,14 +260,10 @@ document.addEventListener("click", function(e) {
     }
 });
 
-// ---------------------------------------------------------------------------
-
-// 9. Reload khi hash thay đổi
+// Hash change handler
 window.addEventListener("hashchange", loadMarkdown);
 
-// ---------------------------------------------------------------------------
-
-// 11. Hàm tách YAML front-matter
+// Extract front matter
 function extractFrontMatter(md) {
     const regex = /^---\s*[\r\n]+([\s\S]+?)[\r\n]+---/;
     const match = md.match(regex);
@@ -321,18 +285,16 @@ function extractFrontMatter(md) {
     return { metadata, content };
 }
 
-// ---------------------------------------------------------------------------
-
+// Category helpers
 function categoryToId(category) {
     return category.toLowerCase().replace(/[^a-z0-9]/g, "") + "-list";
 }
 
-// Format tên category hiển thị
 function formatCategoryTitle(category) {
     return category.replace(/_/g, " ");
 }
 
-// hàm dùng chung thuộc tính của tự tạo cate mới và cate có sẵn
+// Create copy link icon
 function createCopyLinkIcon(slug) {
     const img = document.createElement("img");
     img.src = "https://img.icons8.com/?size=20&id=1BYH0ZFsjeIy&format=png&color=000000";
@@ -358,7 +320,7 @@ function createCopyLinkIcon(slug) {
     return img;
 }
 
-// Tạo section mới bên trên container chính
+// Create category section
 function createCategorySectionAtTop(category) {
     const sectionContainer = document.querySelector('.section-container');
     if (!sectionContainer) return;
@@ -367,17 +329,14 @@ function createCategorySectionAtTop(category) {
     const h2 = document.createElement('h2');
     const ul = document.createElement('ul');
 
-    // Tạo slug và tiêu đề
     const titleText = formatCategoryTitle(category);
     const slug = slugify(titleText);
     h2.id = slug;
     h2.textContent = titleText;
 
-    // Chèn icon link ngay sau tiêu đề
     const copyIcon = createCopyLinkIcon(slug);
     h2.appendChild(copyIcon);
 
-    // bắt đầu từ đoạn này không được xoá, tính năng section để tự render ra post sau khi update bên posts.json
     ul.id = categoryToId(category);
 
     section.appendChild(h2);
@@ -385,12 +344,10 @@ function createCategorySectionAtTop(category) {
     sectionContainer.appendChild(section);
 }
 
-// Hàm render chính
+// Render post lists
 async function renderPostLists() {
     try {
-        const res = await fetch("/posts/posts.json", {
-            cache: "no-store"
-        });
+        const res = await fetch("/posts/posts.json", { cache: "no-store" });
         if (!res.ok) throw new Error("Không thể load posts.json");
 
         const posts = await res.json();
@@ -402,7 +359,6 @@ async function renderPostLists() {
             const category = post.category || "Uncategorized";
             const listId = categoryToId(category);
 
-            // Tự động tạo section cho mỗi category
             if (!createdSections.has(listId)) {
                 createCategorySectionAtTop(category);
                 createdSections.add(listId);
@@ -438,9 +394,7 @@ async function renderPostLists() {
     }
 }
 
-// ---------------------------------------------------------------------------
-
-// 14. Thêm icon copy link cho các tiêu đề section tĩnh
+// Add copy icons to existing sections
 function addCopyIconsToSections() {
     document.querySelectorAll(".section-container section h2").forEach((h2) => {
         const slug = slugify(h2.textContent);
@@ -453,28 +407,19 @@ function addCopyIconsToSections() {
     });
 }
 
-// ---------------------------------------------------------------------------
-
-// 15. Highlight section khi truy cập hash tương ứng
+// Highlight section on hash
 function highlightHeadingOnHash(slug) {
-    // Xóa highlight cũ
-    document
-        .querySelectorAll(".section-container section h2.active-heading")
+    document.querySelectorAll(".section-container section h2.active-heading")
         .forEach((h2) => {
             h2.classList.remove("active-heading");
         });
 
-    // Nếu có slug truyền vào thì dùng, không thì fallback về location.hash
     const hash = typeof slug === "string" ? slug : location.hash.substring(1);
     if (!hash) return;
 
-    // Tìm chính xác <h2 id="hash">
-    const target = document.querySelector(
-        `.section-container section h2#${hash}`,
-    );
+    const target = document.querySelector(`.section-container section h2#${hash}`);
     if (target) {
         target.classList.add("active-heading");
-        // Scroll vào view nếu cần
         target.scrollIntoView({
             behavior: "smooth",
             block: "start"
@@ -482,30 +427,25 @@ function highlightHeadingOnHash(slug) {
     }
 }
 
-// ---------------------------------------------------------------------------
-
-// back về home
+// Toggle back button
 function toggleBackButton() {
     const btn = document.getElementById("backHome");
     if (!btn) return;
     btn.style.display = window.location.hash ? "block" : "none";
 }
 
-// ---------------------------------------------------------------------------
-
-// 10. Khởi chạy lần đầu
+// Initialize everything
 document.addEventListener("DOMContentLoaded", async () => {
     await renderPostLists();
-    loadMarkdown(); // Gọi sau khi danh sách load xong
+    loadMarkdown();
 
     window.addEventListener("scroll", scrollHandler);
     
-    // Highlight và back button
     highlightHeadingOnHash();
     toggleBackButton();
     addCopyIconsToSections();
 
-    // Xử lý nút đổi kích thước
+    // Full screen toggle
     const toggleBtn = document.getElementById("toggleWidthBtn");
     if (toggleBtn) {
         toggleBtn.addEventListener("click", () => {
@@ -513,18 +453,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             const toc = document.getElementById("toc");
             if (!content) return;
 
-            // Chuyển đổi giữa chế độ focus mode và bình thường
             const isFocus = document.body.classList.toggle("focus-mode");
-
-            // Clear các lớp cũ của markdown-content
             content.classList.remove("normal-width", "full-width");
-
-            // Cập nhật text của nút
+            
             toggleBtn.textContent = isFocus ?
                 "Exit full screen mode" :
                 "Full Screen";
 
-            // Ẩn hoặc hiện TOC tùy vào chế độ focus mode
             if (toc) {
                 toc.style.display = isFocus ? "none" : "block";
             }
@@ -532,9 +467,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-// Event listeners cho hash change
+// Hash change events
 window.addEventListener("hashchange", () => {
     highlightHeadingOnHash();
     toggleBackButton();
 });
-
