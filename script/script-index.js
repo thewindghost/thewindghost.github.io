@@ -108,9 +108,6 @@ function waitForLibraries() {
 
 // 4. Load Markdown từ file .md
 async function loadMarkdown() {
-    // Wait for libraries first
-    await waitForLibraries();
-
     // Phục hồi theme đã lưu
     const saved = localStorage.getItem("theme");
     if (saved) themeLink.href = saved;
@@ -142,6 +139,11 @@ async function loadMarkdown() {
         document.getElementById("footer").style.display = "none";
 
         return;
+    }
+
+    // Wait for libraries but don't block if they're already loaded
+    if (!window.marked || !window.DOMPurify) {
+        await waitForLibraries();
     }
 
     try {
