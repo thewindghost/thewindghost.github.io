@@ -1,5 +1,5 @@
 ---
-date: 2025-08-14 10:15:00 AM
+date: 2025-09-20 17:15:00 PM
 ---
 
 # DOM-Based Redirect Lab Solved Via Unintended Path
@@ -11,5 +11,6 @@ date: 2025-08-14 10:15:00 AM
 
 
 ![Poc Video](https://thewindghost.github.io/posts/image-post/dom_based_open_redirect/poc_dom_based_open_redirect.gif)
+
 
 
