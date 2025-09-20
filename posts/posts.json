@@ -8,7 +8,7 @@
   {
      "filename": "cve-2025-23001.md",
      "title": "CVE-2025-23001 Host Header Injection",
-     "category": "cve",
+     "category": "My CVEs",
      "image": ""
   },
   {
@@ -30,6 +30,7 @@
      "image": ""
   }
 ]
+
 
 
 
