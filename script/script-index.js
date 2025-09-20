@@ -403,8 +403,25 @@ window.addEventListener("hashchange", () => {
     toggleBackButton();
 });
 
+// Wait for all libraries to load before initializing
+function waitForLibraries() {
+    return new Promise((resolve) => {
+        const checkLibraries = () => {
+            if (window.marked && window.DOMPurify && window.Prism) {
+                resolve();
+            } else {
+                setTimeout(checkLibraries, 50);
+            }
+        };
+        checkLibraries();
+    });
+}
+
 // Initialize on DOM ready
 document.addEventListener("DOMContentLoaded", async () => {
+    // Wait for libraries to load first
+    await waitForLibraries();
+    
     // Load posts first, then markdown
     await renderPostLists();
     addCopyIconsToSections();
