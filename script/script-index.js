@@ -189,17 +189,34 @@ async function loadPost(file, container, main, toc, toggleBtn) {
 
 // Tạo TOC
 function generateTOC() {
-    if (!tocList) return;
+    console.log("Generating TOC...");
+    if (!tocList) {
+        console.log("tocList not found");
+        return;
+    }
+    
     tocList.innerHTML = "";
 
     const content = document.getElementById("markdown-content");
-    if (!content) return;
+    if (!content) {
+        console.log("markdown-content not found");
+        return;
+    }
 
-    const headings = content.querySelectorAll("h1, h2, h3");
-    headings.forEach((h) => {
+    const headings = content.querySelectorAll("h1, h2, h3, h4, h5, h6");
+    console.log("Found headings:", headings.length);
+    
+    if (headings.length === 0) {
+        console.log("No headings found in markdown content");
+        return;
+    }
+
+    headings.forEach((h, index) => {
         const text = h.textContent;
         const id = slugify(text);
         h.id = id;
+
+        console.log(`Processing heading ${index}: ${text} -> #${id}`);
 
         const li = document.createElement("li");
         const a = document.createElement("a");
@@ -208,9 +225,15 @@ function generateTOC() {
         li.appendChild(a);
         tocList.appendChild(li);
 
+        // Style based on heading level
         if (h.tagName === "H2") li.style.marginLeft = "0.5em";
         if (h.tagName === "H3") li.style.marginLeft = "1em";
+        if (h.tagName === "H4") li.style.marginLeft = "1.5em";
+        if (h.tagName === "H5") li.style.marginLeft = "2em";
+        if (h.tagName === "H6") li.style.marginLeft = "2.5em";
     });
+    
+    console.log("TOC generated successfully");
 }
 
 // Slugify text
