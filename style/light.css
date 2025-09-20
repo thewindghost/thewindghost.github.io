@@ -249,3 +249,11 @@ ul li a:hover {
 	margin-bottom: 2rem;
 }
 
+footer {
+	margin-top: auto;
+	text-align: center;
+	padding: 1em;
+	background: #f5f5f5;
+	color: #333;
+}
+
