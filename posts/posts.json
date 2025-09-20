@@ -8,28 +8,29 @@
   {
      "filename": "cve-2025-23001.md",
      "title": "CVE-2025-23001 Host Header Injection",
-     "category": "CVE",
+     "category": "cve",
      "image": ""
   },
   {
      "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug-vi.md",
      "title": "SSRF-induced Cache Poisoning Logic Bug(vi)",
-     "category": "Bug_Bounty",
+     "category": "Bug Bounty",
      "image": ""
   },
   {
      "filename": "",
      "title": "",
-     "category": "Private_Program",
+     "category": "Private Program",
      "image": ""
   },
   {
      "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug-en.md",
      "title": "SSRF-induced-Cache-Poisoning-Logic-Bug(en)",
-     "category": "Bug_Bounty",
+     "category": "Bug Bounty",
      "image": ""
   }
 ]
+
 
 
 
