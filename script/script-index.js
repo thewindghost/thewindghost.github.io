@@ -291,20 +291,10 @@ function createCategorySectionAtTop(category) {
     const h2 = document.createElement('h2');
     const ul = document.createElement('ul');
 
-    // Random icon
-    const randomIcons = ['🔐', '🛡️', '💻', '🔍', '⚡', '🎯', '🚀', '🔥', '💡', '🎪', '🌟'];
-    const randIcon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-
     const titleText = formatCategoryTitle(category);
     const slug = slugify(titleText);
     h2.id = slug;
-
-    // Add icon and title
-    const spanIcon = document.createElement('span');
-    spanIcon.textContent = randIcon;
-    spanIcon.style.marginRight = '0.5em';
-    h2.appendChild(spanIcon);
-    h2.appendChild(document.createTextNode(titleText));
+    h2.textContent = titleText;
 
     // Add copy link icon
     const copyIcon = createCopyLinkIcon(slug);
