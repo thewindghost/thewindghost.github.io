@@ -143,11 +143,11 @@ async function loadPost(file, container, main, toc, toggleBtn) {
 
         const { metadata, content } = extractFrontMatter(md);
 
-        if (metadata.date) {
+        if (metadata.date && postTime) {
             const dt = new Date(metadata.date);
             postTime.textContent = `Last Update: ${dt.toLocaleString()}`;
             postTime.style.display = "block";
-        } else {
+        } else if (postTime) {
             postTime.style.display = "none";
         }
 
