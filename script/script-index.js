@@ -213,8 +213,6 @@ async function loadMarkdown() {
         // Xóa luôn section Read More
         const oldRec2 = document.getElementById("recommendations");
         if (oldRec2) oldRec2.remove();
-        // Ẩn <footer id="footer">
-        document.getElementById("footer").style.display = "none";
     }
 }
 
@@ -539,3 +537,4 @@ window.addEventListener("hashchange", () => {
     highlightHeadingOnHash();
     toggleBackButton();
 });
+
