@@ -255,9 +255,11 @@ ul li a {
 }
 
 footer {
-	margin-top: auto;
-	text-align: center;
-	padding: 1em;
-	background: #f5f5f5;
-	color: #333;
+  margin-top: auto;
+  text-align: center;
+  padding: 1em;
+  background: #111;
+  color: #33ff33;
+  border-top: 1px solid #006600;
 }
+
