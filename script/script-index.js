@@ -385,7 +385,6 @@ function categoryIconFromTitle(category) {
         Bug_Bounty: "",
         CVE: "",
         Private_Program: "",
-        Direct_Collaboration: "",
     };
 
     return icons[category] || ""; // với category mới, trả về ''
@@ -472,7 +471,6 @@ async function renderPostLists() {
             Bug_Bounty: "bugbounty-list",
             CVE: "cve-list",
             Private_Program: "privateprogram-list",
-            Direct_Collaboration: "directcollab-list",
         };
 
         const createdDynamicSections = {};
@@ -614,5 +612,6 @@ if (footer && toc && toc.style.display !== "none") {
 } else if (footer) {
     footer.style.display = "none";
 }
+
 
 
