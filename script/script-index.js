@@ -87,12 +87,16 @@ async function loadMarkdown() {
     const file = getPostFromURL();
 
     if (!file) {
-        // No post selected - show post lists
+        // No post selected - show homepage (post lists), hide post content
         if (main) main.style.display = "none";
         if (toc) toc.style.display = "none";
         if (toggleBtn) toggleBtn.style.display = "none";
 
-        document.querySelectorAll("section").forEach(sec => sec.style.display = "block");
+        // Show all category sections on homepage
+        document.querySelectorAll(".section-container section").forEach(sec => {
+            sec.style.display = "block";
+        });
+        
         if (container) container.innerHTML = "";
 
         const oldRec = document.getElementById("recommendations");
@@ -135,25 +139,25 @@ async function loadMarkdown() {
 
         if (window.Prism) Prism.highlightAll();
 
-        // Show post content
+        // Show post content, hide homepage sections
         if (main) main.style.display = "block";
         if (toc) toc.style.display = "block";
 
         const footerEl = document.getElementById("footer");
         if (footerEl) footerEl.style.display = "block";
 
-        // Hide section lists
+        // Hide ALL section lists when viewing a post
         document.querySelectorAll(".section-container section").forEach(sec => {
             sec.style.display = "none";
         });
 
     } catch (err) {
-        console.error("Error loading markdown:", err);
-        
+        // Error loading post - show homepage again  
         if (main) main.style.display = "none";
         if (toc) toc.style.display = "none";
         if (toggleBtn) toggleBtn.style.display = "none";
 
+        // Show category sections again
         document.querySelectorAll(".section-container section").forEach(sec => {
             sec.style.display = "block";
         });
