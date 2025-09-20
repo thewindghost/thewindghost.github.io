@@ -382,9 +382,6 @@ function formatCategoryTitle(category) {
 
 function categoryIconFromTitle(category) {
     const icons = {
-        Bug_Bounty: "",
-        CVE: "",
-        Private_Program: "",
     };
 
     return icons[category] || ""; // với category mới, trả về ''
@@ -466,12 +463,6 @@ async function renderPostLists() {
 
         const posts = await res.json();
         allPosts = posts;
-
-        const categories = {
-            Bug_Bounty: "bugbounty-list",
-            CVE: "cve-list",
-            Private_Program: "privateprogram-list",
-        };
 
         const createdDynamicSections = {};
 
@@ -612,6 +603,7 @@ if (footer && toc && toc.style.display !== "none") {
 } else if (footer) {
     footer.style.display = "none";
 }
+
 
 
 
