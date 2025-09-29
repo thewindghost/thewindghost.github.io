@@ -10,10 +10,9 @@ date: 2025-09-20 05:15:00 PM
 ![Feedback for PortSwigger Academy](https://thewindghost.github.io/posts/image-post/dom_based_open_redirect/image1.png)
 
 
-![Poc Video](https://thewindghost.github.io/posts/image-post/dom_based_open_redirect/poc_dom_based_open_redirect.gif)
-
-
-
-
-
-
+<iframe width="560" height="315"
+src="https://www.youtube.com/watch?v=xOX6TJBx8GM"
+frameborder="0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen>
+</iframe>
