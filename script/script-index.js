@@ -1,20 +1,30 @@
-// 1. Các biến toàn cục
-const themeLink = document.getElementById("themeStylesheet");
-
-const tocList =
-    document.querySelector("#toc ul") ||
-    (() => {
-        const ul = document.createElement("ul");
-        document.getElementById("toc")?.appendChild(ul);
-        return ul;
-    })();
-
-const postTime = document.getElementById("post-time");
+// 1. Các biến toàn cục - khởi tạo sau khi DOM ready
+let themeLink, tocList, postTime;
 
 // Biến toàn cục lưu danh sách posts
 let allPosts = [];
 
-// Lấy 3 bài ngẫu nhiên ngoài bài hiện tại
+// Initialize DOM elements
+function initializeElements() {
+    themeLink = document.getElementById("themeStylesheet");
+    postTime = document.getElementById("post-time");
+    
+    // Get or create TOC list
+    tocList = document.querySelector("#toc ul");
+    if (!tocList) {
+        const tocContainer = document.getElementById("toc");
+        if (tocContainer) {
+            tocList = document.createElement("ul");
+            tocContainer.appendChild(tocList);
+        }
+    }
+    
+    console.log("Elements initialized:", {
+        themeLink: !!themeLink,
+        postTime: !!postTime,
+        tocList: !!tocList
+    });
+}
 function getRandomRecommendations(currentSlug, count = 3) {
     const others = allPosts.filter(
         (p) => p.filename.replace(".md", "") !== currentSlug,
@@ -67,8 +77,10 @@ function ensureMarkdownContainer() {
 
 // Chuyển theme và lưu vào localStorage
 function switchTheme(cssFile) {
-    themeLink.setAttribute("href", cssFile);
-    localStorage.setItem("theme", cssFile);
+    if (themeLink) {
+        themeLink.setAttribute("href", cssFile);
+        localStorage.setItem("theme", cssFile);
+    }
 }
 
 // Lấy tên bài viết từ hash
@@ -78,11 +90,11 @@ function getPostFromURL() {
     return postName ? `/posts/${postName}.md` : null;
 }
 
-// Wait for libraries
+// Wait for libraries (bỏ DOMPurify)
 function waitForLibraries() {
     return new Promise((resolve) => {
         const checkLibraries = () => {
-            if (window.marked && window.DOMPurify && window.Prism) {
+            if (window.marked && window.Prism) {
                 resolve();
             } else {
                 setTimeout(checkLibraries, 50);
@@ -143,9 +155,17 @@ async function loadPost(file, container, main, toc, toggleBtn) {
         const { metadata, content } = extractFrontMatter(md);
 
         if (metadata.date && postTime) {
-            const dt = new Date(metadata.date);
-            postTime.textContent = `Last Update: ${dt.toLocaleString()}`;
-            postTime.style.display = "block";
+            // Clean up date string - remove extra spaces and fix PM format
+            let dateStr = metadata.date.trim().replace(/\s+PM/i, ' PM').replace(/\s+AM/i, ' AM');
+            const dt = new Date(dateStr);
+            
+            if (!isNaN(dt.getTime())) {
+                postTime.textContent = `Last Update: ${dt.toLocaleString()}`;
+                postTime.style.display = "block";
+            } else {
+                console.error("Invalid date format:", metadata.date);
+                postTime.style.display = "none";
+            }
         } else if (postTime) {
             postTime.style.display = "none";
         }
@@ -456,7 +476,20 @@ function toggleBackButton() {
 
 // Initialize everything
 document.addEventListener("DOMContentLoaded", async () => {
+    console.log("DOM Content Loaded");
+    
+    // Initialize DOM elements first
+    initializeElements();
+    
+    // Wait for external libraries
+    await waitForLibraries();
+    console.log("Libraries loaded");
+    
+    // Load posts and render
     await renderPostLists();
+    console.log("Posts loaded");
+    
+    // Load current markdown if hash exists
     loadMarkdown();
 
     window.addEventListener("scroll", scrollHandler);
