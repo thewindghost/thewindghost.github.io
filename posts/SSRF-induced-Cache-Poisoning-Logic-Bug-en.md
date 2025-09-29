@@ -151,7 +151,7 @@ This vulnerability can lead to Open Redirect attacks, which may sound low-impact
 
 ## 6. Proof-of-Concept (POC) - Video
 
-![](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/video.gif)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/cUJ6c-T3vyU" title="SSRF-induced Cache Poisoning Logic Bug Flaw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## 7. Conclusion
 
