@@ -90,7 +90,7 @@ function getPostFromURL() {
     return postName ? `/posts/${postName}.md` : null;
 }
 
-// Wait for libraries (bỏ DOMPurify)
+// Wait for required libraries
 function waitForLibraries() {
     return new Promise((resolve) => {
         const checkLibraries = () => {
