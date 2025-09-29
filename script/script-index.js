@@ -142,7 +142,7 @@ function loadMarkdown() {
 async function loadPost(file, container, main, toc, toggleBtn) {
     try {
         // Wait for libraries
-        if (!window.marked || !window.DOMPurify) {
+        if (!window.marked) {
             await waitForLibraries();
         }
 
@@ -171,9 +171,8 @@ async function loadPost(file, container, main, toc, toggleBtn) {
         }
 
         const html = marked.parse(content);
-        const safe = DOMPurify.sanitize(html);
 
-        container.innerHTML = safe;
+        container.innerHTML = html;
         container.classList.add("normal-width");
         container.classList.remove("full-width");
         generateTOC();
@@ -526,3 +525,4 @@ window.addEventListener("hashchange", () => {
     highlightHeadingOnHash();
     toggleBackButton();
 });
+
