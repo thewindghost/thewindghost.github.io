@@ -151,10 +151,11 @@ Lỗ hổng này có thể dẫn đến tấn công Open Redirect, nghe có vẻ
 
 ## 6. Proof-of-Concept (POC) - Video
 
-![](https://thewindghost.github.io/posts/image-post/cache-poisoning-via-fetching-data/video.gif)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/cUJ6c-T3vyU" title="SSRF-induced Cache Poisoning Logic Bug Flaw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## 7. Kết Luận
 Qua lỗ hổng này, chúng ta có thể thấy rằng một lỗ hổng tưởng chừng có mức độ nghiêm trọng thấp (P5) ban đầu lại có thể trở nên nguy hiểm hơn khi được kết hợp với một lỗi logic trong ứng dụng. Điều này nhấn mạnh tầm quan trọng của việc không chỉ tìm thấy lỗ hổng mà còn phải phân tích kỹ lưỡng cơ chế hoạt động của chúng để đánh giá đúng mức độ rủi ro.
+
 
 
 
