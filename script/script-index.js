@@ -1,15 +1,12 @@
-// 1. Các biến toàn cục - khởi tạo sau khi DOM ready
 let themeLink, tocList, postTime;
-
-// Biến toàn cục lưu danh sách posts
 let allPosts = [];
+let currentFetchController = null;
 
 // Initialize DOM elements
 function initializeElements() {
     themeLink = document.getElementById("themeStylesheet");
     postTime = document.getElementById("post-time");
     
-    // Get or create TOC list
     tocList = document.querySelector("#toc ul");
     if (!tocList) {
         const tocContainer = document.getElementById("toc");
@@ -18,21 +15,15 @@ function initializeElements() {
             tocContainer.appendChild(tocList);
         }
     }
-    
-    console.log("Elements initialized:", {
-        themeLink: !!themeLink,
-        postTime: !!postTime,
-        tocList: !!tocList
-    });
 }
+
 function getRandomRecommendations(currentSlug, count = 3) {
     const others = allPosts.filter(
-        (p) => p.filename.replace(".md", "") !== currentSlug,
+        (p) => p.filename && p.filename.replace(".md", "") !== currentSlug
     );
     return others.sort(() => Math.random() - 0.5).slice(0, count);
 }
 
-// Render khuyến nghị dưới main content
 function renderRecommendations(currentSlug) {
     const recs = getRandomRecommendations(currentSlug);
     const main = document.querySelector("main");
@@ -62,7 +53,6 @@ function renderRecommendations(currentSlug) {
     if (main) main.appendChild(sec);
 }
 
-// Đảm bảo có container cho Markdown
 function ensureMarkdownContainer() {
     let container = document.getElementById("markdown-content");
     const main = document.querySelector("main");
@@ -75,7 +65,6 @@ function ensureMarkdownContainer() {
     return container;
 }
 
-// Chuyển theme và lưu vào localStorage
 function switchTheme(cssFile) {
     if (themeLink) {
         themeLink.setAttribute("href", cssFile);
@@ -83,32 +72,15 @@ function switchTheme(cssFile) {
     }
 }
 
-// Lấy tên bài viết từ hash
 function getPostFromURL() {
     const hash = window.location.hash;
     const postName = hash ? hash.substring(1) : null;
     return postName ? `/posts/${postName}.md` : null;
 }
 
-// Wait for required libraries
-function waitForLibraries() {
-    return new Promise((resolve) => {
-        const checkLibraries = () => {
-            if (window.marked && window.Prism) {
-                resolve();
-            } else {
-                setTimeout(checkLibraries, 50);
-            }
-        };
-        checkLibraries();
-    });
-}
-
-// Load Markdown từ file .md
 function loadMarkdown() {
-    // Không async ở đây để tránh lỗi
     const saved = localStorage.getItem("theme");
-    if (saved) themeLink.href = saved;
+    if (saved && themeLink) themeLink.href = saved;
 
     const toggleBtn = document.getElementById("toggleWidthBtn");
     const toc = document.getElementById("toc");
@@ -119,7 +91,6 @@ function loadMarkdown() {
     const main = document.querySelector("main");
 
     if (!file) {
-        // Không có bài viết - hiện danh sách
         if (main) main.style.display = "none";
         if (toc) toc.style.display = "none";
         if (toggleBtn) toggleBtn.style.display = "none";
@@ -134,32 +105,33 @@ function loadMarkdown() {
         return;
     }
 
-    // Load bài viết async
     loadPost(file, container, main, toc, toggleBtn);
 }
 
-// Hàm async riêng để load post
 async function loadPost(file, container, main, toc, toggleBtn) {
-    try {
-        // Wait for libraries
-        if (!window.marked) {
-            await waitForLibraries();
-        }
+    
+    if (currentFetchController) {
+        currentFetchController.abort();
+    }
+    currentFetchController = new AbortController();
 
+    try {
         if (toggleBtn) toggleBtn.style.display = "inline-block";
 
-        const res = await fetch(file, { cache: "no-store" });
+        const res = await fetch(file, { 
+            cache: "no-store",
+            signal: currentFetchController.signal 
+        });
+        
         if (!res.ok) throw new Error("File not found");
         const md = await res.text();
 
         const { metadata, content } = extractFrontMatter(md);
 
         if (metadata.date && postTime) {
-            // Clean up date string - remove extra spaces and fix PM format
-            let dateStr = metadata.date.trim().replace(/\s+PM/i, ' PM').replace(/\s+AM/i, ' AM');
-            const dt = new Date(dateStr);
+            const dt = parseCustomDate(metadata.date);
             
-            if (!isNaN(dt.getTime())) {
+            if (dt && !isNaN(dt.getTime())) {
                 postTime.textContent = `Last Update: ${dt.toLocaleString()}`;
                 postTime.style.display = "block";
             } else {
@@ -171,10 +143,11 @@ async function loadPost(file, container, main, toc, toggleBtn) {
         }
 
         const html = marked.parse(content);
-
         container.innerHTML = html;
-        container.classList.add("normal-width");
+
         container.classList.remove("full-width");
+        container.classList.add("normal-width");
+        
         generateTOC();
 
         const currentSlug = window.location.hash.substring(1);
@@ -190,6 +163,11 @@ async function loadPost(file, container, main, toc, toggleBtn) {
         });
 
     } catch (err) {
+        if (err.name === 'AbortError') {
+            console.log('Fetch aborted');
+            return;
+        }
+        
         console.error("Error loading post:", err);
         
         if (main) main.style.display = "none";
@@ -203,39 +181,49 @@ async function loadPost(file, container, main, toc, toggleBtn) {
 
         const oldRec = document.getElementById("recommendations");
         if (oldRec) oldRec.remove();
+    } finally {
+        currentFetchController = null;
     }
 }
 
-// Tạo TOC
+function parseCustomDate(dateStr) {
+    const parts = dateStr.match(/(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}):(\d{2})\s+(AM|PM)/i);
+    if (!parts) return new Date(dateStr); // Fallback
+    
+    let [_, year, month, day, hour, min, sec, meridiem] = parts;
+    hour = parseInt(hour);
+    
+    if (meridiem.toUpperCase() === 'PM' && hour !== 12) hour += 12;
+    if (meridiem.toUpperCase() === 'AM' && hour === 12) hour = 0;
+    
+    return new Date(`${year}-${month}-${day}T${hour.toString().padStart(2,'0')}:${min}:${sec}`);
+}
+
 function generateTOC() {
-    console.log("Generating TOC...");
-    if (!tocList) {
-        console.log("tocList not found");
-        return;
-    }
+    if (!tocList) return;
     
     tocList.innerHTML = "";
 
     const content = document.getElementById("markdown-content");
-    if (!content) {
-        console.log("markdown-content not found");
-        return;
-    }
+    if (!content) return;
 
     const headings = content.querySelectorAll("h1, h2, h3, h4, h5, h6");
-    console.log("Found headings:", headings.length);
-    
-    if (headings.length === 0) {
-        console.log("No headings found in markdown content");
-        return;
-    }
+    if (headings.length === 0) return;
 
-    headings.forEach((h, index) => {
+    const usedIds = new Set();
+
+    headings.forEach((h) => {
         const text = h.textContent;
-        const id = slugify(text);
-        h.id = id;
+        let id = slugify(text);
+        let counter = 1;
 
-        console.log(`Processing heading ${index}: ${text} -> #${id}`);
+        while (usedIds.has(id)) {
+            id = `${slugify(text)}-${counter}`;
+            counter++;
+        }
+        
+        h.id = id;
+        usedIds.add(id);
 
         const li = document.createElement("li");
         const a = document.createElement("a");
@@ -244,29 +232,26 @@ function generateTOC() {
         li.appendChild(a);
         tocList.appendChild(li);
 
-        // Style based on heading level
         if (h.tagName === "H2") li.style.marginLeft = "0.5em";
         if (h.tagName === "H3") li.style.marginLeft = "1em";
         if (h.tagName === "H4") li.style.marginLeft = "1.5em";
         if (h.tagName === "H5") li.style.marginLeft = "2em";
         if (h.tagName === "H6") li.style.marginLeft = "2.5em";
     });
-    
-    console.log("TOC generated successfully");
 }
 
-// Slugify text
 function slugify(text) {
     return text
         .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase()
         .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
         .replace(/\s+/g, "-")
-        .replace(/[^\w\-]+/g, "")
-        .replace(/\-\-+/g, "-");
+        .replace(/-+/g, "-");
 }
 
-// Scroll handlers
 function scrollHandler() {
     const btn = document.getElementById("scrollToTop");
     if (!btn) return;
@@ -281,7 +266,6 @@ function scrollToTop() {
     });
 }
 
-// TOC click handler
 document.addEventListener("click", function(e) {
     if (e.target.tagName === "A" && e.target.closest("#toc")) {
         const targetId = e.target.getAttribute("href").substring(1);
@@ -297,12 +281,10 @@ document.addEventListener("click", function(e) {
     }
 });
 
-// Hash change handler - make async
-window.addEventListener("hashchange", async () => {
+window.addEventListener("hashchange", () => {
     loadMarkdown();
 });
 
-// Extract front matter
 function extractFrontMatter(md) {
     const regex = /^---\s*[\r\n]+([\s\S]+?)[\r\n]+---/;
     const match = md.match(regex);
@@ -324,7 +306,6 @@ function extractFrontMatter(md) {
     return { metadata, content };
 }
 
-// Category helpers
 function categoryToId(category) {
     return category.toLowerCase().replace(/[^a-z0-9]/g, "") + "-list";
 }
@@ -333,7 +314,6 @@ function formatCategoryTitle(category) {
     return category.replace(/_/g, " ");
 }
 
-// Create copy link icon
 function createCopyLinkIcon(slug) {
     const img = document.createElement("img");
     img.src = "https://img.icons8.com/?size=20&id=1BYH0ZFsjeIy&format=png&color=000000";
@@ -359,7 +339,6 @@ function createCopyLinkIcon(slug) {
     return img;
 }
 
-// Create category section
 function createCategorySectionAtTop(category) {
     const sectionContainer = document.querySelector('.section-container');
     if (!sectionContainer) return;
@@ -383,7 +362,6 @@ function createCategorySectionAtTop(category) {
     sectionContainer.appendChild(section);
 }
 
-// Render post lists
 async function renderPostLists() {
     try {
         const res = await fetch("/posts/posts.json", { cache: "no-store" });
@@ -394,7 +372,7 @@ async function renderPostLists() {
 
         const createdSections = new Set();
 
-        posts.forEach((post) => {
+        allPosts.forEach((post) => {
             const category = post.category || "Uncategorized";
             const listId = categoryToId(category);
 
@@ -433,7 +411,6 @@ async function renderPostLists() {
     }
 }
 
-// Add copy icons to existing sections
 function addCopyIconsToSections() {
     document.querySelectorAll(".section-container section h2").forEach((h2) => {
         const slug = slugify(h2.textContent);
@@ -446,7 +423,6 @@ function addCopyIconsToSections() {
     });
 }
 
-// Highlight section on hash
 function highlightHeadingOnHash(slug) {
     document.querySelectorAll(".section-container section h2.active-heading")
         .forEach((h2) => {
@@ -466,29 +442,22 @@ function highlightHeadingOnHash(slug) {
     }
 }
 
-// Toggle back button
 function toggleBackButton() {
     const btn = document.getElementById("backHome");
     if (!btn) return;
     btn.style.display = window.location.hash ? "block" : "none";
 }
 
-// Initialize everything
 document.addEventListener("DOMContentLoaded", async () => {
-    console.log("DOM Content Loaded");
+    console.log("Initializing app...");
     
-    // Initialize DOM elements first
     initializeElements();
     
-    // Wait for external libraries
-    await waitForLibraries();
-    console.log("Libraries loaded");
+    if (window.initLibraries) {
+        await window.initLibraries();
+    }
     
-    // Load posts and render
     await renderPostLists();
-    console.log("Posts loaded");
-    
-    // Load current markdown if hash exists
     loadMarkdown();
 
     window.addEventListener("scroll", scrollHandler);
@@ -497,7 +466,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     toggleBackButton();
     addCopyIconsToSections();
 
-    // Full screen toggle
     const toggleBtn = document.getElementById("toggleWidthBtn");
     if (toggleBtn) {
         toggleBtn.addEventListener("click", () => {
@@ -506,11 +474,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!content) return;
 
             const isFocus = document.body.classList.toggle("focus-mode");
-            content.classList.remove("normal-width", "full-width");
-            
-            toggleBtn.textContent = isFocus ?
-                "Exit full screen mode" :
-                "Full Screen";
+
+            if (isFocus) {
+                content.classList.remove("normal-width");
+                content.classList.add("full-width");
+                toggleBtn.textContent = "Exit full screen mode";
+            } else {
+                content.classList.remove("full-width");
+                content.classList.add("normal-width");
+                toggleBtn.textContent = "Full Screen";
+            }
 
             if (toc) {
                 toc.style.display = isFocus ? "none" : "block";
@@ -519,10 +492,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-// Hash change events
 window.addEventListener("hashchange", () => {
     loadMarkdown();
     highlightHeadingOnHash();
     toggleBackButton();
 });
-
