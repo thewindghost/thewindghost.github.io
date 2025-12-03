@@ -1,10 +1,11 @@
-# **This is where my music video is after a tiring day at work. You can listen to it. To be updated.**
+## **This is where my music video is after a tiring day at work. You can listen to it. To be updated.**
 
 ---
 ## **OST Stay With Me**
-### **Piano Device: Victor-02**
 
-### **Device Parameters:**
+**Piano Device: Victor-02**
+
+**Piano Options**
 + Tone Acoustic Piano
 + 84 BPM or Tempo
   
