@@ -1,8 +1,8 @@
 [
   {
-     "filename": "My Music - Piano",
-     "title": "piano.md",
-     "category": "Music - Piano",
+     "filename": "piano.md",
+     "title": "My Music - Piano",
+     "category": "Musics",
      "image": ""
   },
   {
@@ -36,6 +36,7 @@
      "image": ""
   }
 ]
+
 
 
 
