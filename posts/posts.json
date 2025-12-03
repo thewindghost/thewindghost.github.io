@@ -1,5 +1,11 @@
 [
   {
+     "filename": "My Music - Piano",
+     "title": "piano.md",
+     "category": "Music - Piano",
+     "image": ""
+  },
+  {
      "filename": "dom_based_open_redirect.md",
      "title": "DOM-Based Redirect Lab Solved Via Unintended Path",
      "category": "Security Research (other)",
@@ -30,6 +36,7 @@
      "image": ""
   }
 ]
+
 
 
 
