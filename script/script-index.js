@@ -20,10 +20,10 @@ function addCopyButtons() {
             position: 'absolute',
             top: '8px',
             right: '8px',
-            background: 'rgba(255,255,255,0.1)',
-            border: '1px solid rgba(255,255,255,0.25)',
+            background: 'rgba(0,0,0,0.08)',
+            border: '1px solid rgba(0,0,0,0.2)',
             borderRadius: '6px',
-            padding: '5px 7px',
+            padding: '6px 8px',
             cursor: 'pointer',
             zIndex: '10',
             lineHeight: '0',
@@ -46,9 +46,9 @@ function addCopyButtons() {
 }
 
 function svgCopy() {
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" 
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        style="color:#ccc">
+        style="color:#444">
         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>`;
@@ -557,6 +557,7 @@ window.addEventListener("hashchange", () => {
     highlightHeadingOnHash();
     toggleBackButton();
 });
+
 
 
 
