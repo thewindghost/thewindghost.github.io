@@ -1,10 +1,10 @@
-# Extensions in BApp Store for automation scanning (Required Burp Suite Professional)
+## Extensions in BApp Store for automation scanning (Required Burp Suite Professional)
 
 - Comming Soon
 
-# Bambda for HTTP History filter
+## Bambda for HTTP History filter
 
-## How can use:
+### How can use:
 1. Open Burp Suite
 2. Proxy -> HTTP History -> Filter Settings -> HTTP History filter -> Script Mode -> Paste Bamba Filter
 
