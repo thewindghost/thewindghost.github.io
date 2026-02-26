@@ -17,6 +17,7 @@ Sample:
 - Script Mode 1 not using feature `show in scopes` not filter `MIME type`:
 
 ```bambda
+
 String url = requestResponse.url().toLowerCase();
 String urlWithoutParams = url;
 int paramIndex = url.indexOf("?");
@@ -94,6 +95,7 @@ return true;
 - Script Mode 2 using `show in scopes` and have filter `MIME type`:
 
 ```bambda
+
 String path = requestResponse.request().path();
 String method = requestResponse.request().method();
 
