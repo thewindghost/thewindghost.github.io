@@ -25,14 +25,9 @@ function addCopyButtons() {
             borderRadius: '6px',
             padding: '5px 7px',
             cursor: 'pointer',
-            opacity: '0',
-            transition: 'opacity 0.2s',
             zIndex: '10',
             lineHeight: '0',
         });
-
-        pre.addEventListener('mouseenter', () => btn.style.opacity = '1');
-        pre.addEventListener('mouseleave', () => btn.style.opacity = '0');
 
         btn.addEventListener('click', () => {
             const code = pre.querySelector('code');
@@ -562,5 +557,6 @@ window.addEventListener("hashchange", () => {
     highlightHeadingOnHash();
     toggleBackButton();
 });
+
 
 
