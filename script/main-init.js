@@ -20,13 +20,7 @@ window.initLibraries = async function() {
   const renderer = new marked.Renderer();
   renderer.code = function(code, lang) {
       const language = lang || '';
-      const escaped = code
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#039;');
-      return `<pre><code class="language-${language}">${escaped}</code></pre>`;
+      return `<pre><code class="language-${language}">${code.trim()}</code></pre>`;
   };
   marked.use({ renderer });
   
@@ -43,5 +37,6 @@ window.initLibraries = async function() {
 
   return true;
 };
+
 
 
