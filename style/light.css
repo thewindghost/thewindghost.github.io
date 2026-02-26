@@ -257,5 +257,10 @@ footer {
 	color: #333;
 }
 
+#markdown-content pre code {
+    white-space: pre;
+    display: block;
+}
+
 
 
