@@ -2,6 +2,53 @@ let themeLink, tocList, postTime;
 let allPosts = [];
 let currentFetchController = null;
 
+// Copy Buttons
+function addCopyButtons() {
+    const codeBlocks = document.querySelectorAll('#markdown-content pre');
+    
+    codeBlocks.forEach((pre) => {
+        if (pre.querySelector('.copy-btn')) return;
+
+        pre.style.position = 'relative';
+
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.innerHTML = `<img src="https://img.icons8.com/?size=20&id=86207&format=png&color=ffffff" alt="copy" style="width:16px;height:16px;vertical-align:middle;">`;
+        btn.title = 'Copy code';
+
+        Object.assign(btn.style, {
+            position: 'absolute',
+            top: '8px',
+            right: '8px',
+            background: 'rgba(255,255,255,0.1)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: '5px',
+            padding: '4px 6px',
+            cursor: 'pointer',
+            opacity: '0',
+            transition: 'opacity 0.2s',
+            zIndex: '10',
+        });
+
+        pre.addEventListener('mouseenter', () => btn.style.opacity = '1');
+        pre.addEventListener('mouseleave', () => btn.style.opacity = '0');
+
+        btn.addEventListener('click', () => {
+            const code = pre.querySelector('code');
+            const text = code ? code.innerText : pre.innerText;
+
+            navigator.clipboard.writeText(text).then(() => {
+                btn.innerHTML = `<img src="https://img.icons8.com/?size=20&id=3723&format=png&color=00ff00" alt="copied" style="width:16px;height:16px;vertical-align:middle;">`;
+                setTimeout(() => {
+                    btn.innerHTML = `<img src="https://img.icons8.com/?size=20&id=86207&format=png&color=ffffff" alt="copy" style="width:16px;height:16px;vertical-align:middle;">`;
+                }, 1500);
+            });
+        });
+
+        pre.appendChild(btn);
+    });
+}
+
 // Initialize DOM elements
 function initializeElements() {
     themeLink = document.getElementById("themeStylesheet");
@@ -154,6 +201,7 @@ async function loadPost(file, container, main, toc, toggleBtn) {
         renderRecommendations(currentSlug);
 
         if (window.Prism) Prism.highlightAll();
+        addCopyButtons();
 
         if (main) main.style.display = "block";
         if (toc) toc.style.display = "block";
@@ -497,3 +545,4 @@ window.addEventListener("hashchange", () => {
     highlightHeadingOnHash();
     toggleBackButton();
 });
+
