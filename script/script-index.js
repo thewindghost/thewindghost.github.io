@@ -201,6 +201,19 @@ async function loadPost(file, container, main, toc, toggleBtn) {
             postTime.style.display = "none";
         }
 
+        const renderer = new marked.Renderer();
+        renderer.code = function(code, lang) {
+            const language = lang || '';
+            const escaped = code
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+            return `<pre><code class="language-${language}">${escaped}</code></pre>`;
+        };
+        
+        marked.use({ renderer });
         const html = marked.parse(content);
         container.innerHTML = html;
 
@@ -557,6 +570,7 @@ window.addEventListener("hashchange", () => {
     highlightHeadingOnHash();
     toggleBackButton();
 });
+
 
 
 
