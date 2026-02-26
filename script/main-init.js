@@ -40,8 +40,8 @@ window.initLibraries = async function() {
     'sha512-AKaNmg8COK0zEbjTdMHJAPJ0z6VeNqvRvH4/d5M4sHJbQQUToMBtodq4HaV4fa+WV2UTfoperElm66c9/8cKmQ==',
     'anonymous'
   );
-  
-  console.log('Libraries loaded successfully');
+
   return true;
 };
+
 
