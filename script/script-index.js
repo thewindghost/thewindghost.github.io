@@ -202,7 +202,7 @@ async function loadPost(file, container, main, toc, toggleBtn) {
         }
 
         const html = marked.parse(content);
-        container.innerHTML = html;
+        container.innerHTML = html.replace(/<code([^>]*)>\n/g, '<code$1>');
 
         container.classList.remove("full-width");
         container.classList.add("normal-width");
@@ -557,6 +557,7 @@ window.addEventListener("hashchange", () => {
     highlightHeadingOnHash();
     toggleBackButton();
 });
+
 
 
 
