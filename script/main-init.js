@@ -16,11 +16,6 @@ function loadScript(src, integrity = '', crossorigin = '') {
 window.initLibraries = async function() {
   
   await loadScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js');
-
-  marked.setOptions({
-      breaks: true,
-      gfm: true,
-  });
   
   await loadScript(
     'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js',
@@ -35,6 +30,7 @@ window.initLibraries = async function() {
 
   return true;
 };
+
 
 
 
