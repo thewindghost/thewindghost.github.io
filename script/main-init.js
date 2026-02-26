@@ -14,9 +14,22 @@ function loadScript(src, integrity = '', crossorigin = '') {
 }
 
 window.initLibraries = async function() {
-  console.log('Loading libraries...');
   
   await loadScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js');
+  
+  const renderer = new marked.Renderer();
+  renderer.code = function(code, lang) {
+      const language = lang || '';
+      const escaped = code
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      return `<pre><code class="language-${language}">${escaped}</code></pre>`;
+  };
+  marked.use({ renderer });
+  
   await loadScript(
     'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js',
     'sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==',
@@ -31,3 +44,4 @@ window.initLibraries = async function() {
   console.log('Libraries loaded successfully');
   return true;
 };
+
