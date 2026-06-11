@@ -5,11 +5,15 @@ let currentFetchController = null;
 // Copy Buttons
 function addCopyButtons() {
     const codeBlocks = document.querySelectorAll('#markdown-content pre');
-    
+
     codeBlocks.forEach((pre) => {
         if (pre.querySelector('.copy-btn')) return;
 
-        pre.style.position = 'relative';
+        // Wrap pre in a relative container
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
 
         const btn = document.createElement('button');
         btn.className = 'copy-btn';
@@ -32,19 +36,18 @@ function addCopyButtons() {
         btn.addEventListener('click', () => {
             const code = pre.querySelector('code');
             const raw = code ? code.textContent : pre.textContent;
-        
-            // Decode HTML entities (&#39; → ', &amp; → &, etc.)
+
             const txt = document.createElement('textarea');
             txt.innerHTML = raw;
             const text = txt.value;
-        
+
             navigator.clipboard.writeText(text).then(() => {
                 btn.innerHTML = svgCheck();
                 setTimeout(() => btn.innerHTML = svgCopy(), 1500);
             });
         });
 
-        pre.appendChild(btn);
+        wrapper.appendChild(btn); // append to wrapper, NOT pre
     });
 }
 
