@@ -226,6 +226,7 @@ async function loadPost(file, container, main, toc, toggleBtn) {
         container.classList.add("normal-width");
         
         generateTOC();
+        setupTOCScrollSpy();
 
         const currentSlug = window.location.hash.substring(1);
         renderRecommendations(currentSlug);
@@ -315,6 +316,23 @@ function generateTOC() {
         if (h.tagName === "H5") li.style.marginLeft = "2em";
         if (h.tagName === "H6") li.style.marginLeft = "2.5em";
     });
+}
+
+function setupTOCScrollSpy() {
+    const headings = document.querySelectorAll('#markdown-content h1, #markdown-content h2, #markdown-content h3, #markdown-content h4');
+    const tocLinks = document.querySelectorAll('#toc a');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(a => a.classList.remove('active'));
+                const active = document.querySelector(`#toc a[href="#${entry.target.id}"]`);
+                if (active) active.classList.add('active');
+            }
+        });
+    }, { rootMargin: '0px 0px -70% 0px' });
+
+    headings.forEach(h => observer.observe(h));
 }
 
 function slugify(text) {
