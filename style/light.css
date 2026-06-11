@@ -268,24 +268,55 @@ footer {
     display: block;
 }
 
-/* === Post list on homepage only === */
+/* === Homepage post list — card grid === */
+.section-container ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 24px;
+}
+
+.section-container ul li {
+    margin: 0;
+}
+
 .section-container ul li a {
     display: block;
-    padding: 0.75em 1em;
-    margin: 0.5em 0;
+    padding: 10px 12px;
+    background: #fff;
+    border: 0.5px solid #dde2ea;
     border-radius: 8px;
-    background-color: #dad0d0;
-    color: #0d47a1;
+    color: #003366;
+    font-size: 14px;
+    font-weight: 400;
     text-decoration: none;
-    font-weight: 500;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease;
+    box-shadow: none;
+    transform: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    height: 100%;
 }
 
 .section-container ul li a:hover {
-    background-color: #e3f2fd;
-    color: #1565c0;
-    transform: translateY(-1px);
+    background: #fff;
+    border-color: #378ADD;
+    box-shadow: 0 0 0 2px rgba(55, 138, 221, 0.1);
+    color: #003366;
+    transform: none;
+    text-decoration: none;
+}
+
+.section-container ul li a::after {
+    content: attr(data-tag);
+    display: block;
+    font-size: 11px;
+    color: #185FA5;
+    background: #e6f1fb;
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-top: 6px;
+    width: fit-content;
 }
 
 /* === References links inside markdown === */
