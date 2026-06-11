@@ -88,46 +88,76 @@ main {
 	overflow-wrap: break-word;
 }
 
-/* === TOC Sidebar (bên trái) === */
+/* === TOC Sidebar === */
 
 #toc {
-	position: sticky;
-	top: 20px;
-	max-height: 90vh;
-	overflow-y: auto;
-	padding-right: 1em;
-	flex-shrink: 0;
-
-	width: 250px;
-	min-width: 200px;
-	max-width: 300px;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	white-space: normal;
+    position: sticky;
+    top: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+    flex-shrink: 0;
+    width: 250px;
+    min-width: 200px;
+    max-width: 280px;
+    padding: 1em;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 #toc h2 {
-	margin-top: 0;
-	font-size: 1.2em;
+    margin-top: 0;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+    border-bottom: none;
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
 }
 
 #toc ul {
-	list-style: none;
-	padding-left: 0;
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    border-left: 2px solid #e0e0e0;
 }
 
 #toc li {
-	margin: 0.5em 0;
+    margin: 0;
 }
 
 #toc a {
-	display: block;
-	line-height: 1.5em;
-	word-break: break-word;
+    display: block;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #555;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+    word-break: break-word;
+    transition: all 0.15s ease;
+    border-radius: 0;
+    background: none;
+    font-weight: 400;
+    box-shadow: none;
+    transform: none;
 }
 
 #toc a:hover {
-	text-decoration: underline;
+    color: #003366;
+    border-left-color: #007acc;
+    background: rgba(0, 122, 204, 0.05);
+    text-decoration: none;
+    transform: none;
+}
+
+#toc a.active {
+    color: #003366;
+    border-left-color: #007acc;
+    background: rgba(0, 122, 204, 0.07);
+    font-weight: 500;
 }
 
 /* === Vùng nội dung Markdown === */
