@@ -6,6 +6,18 @@
      "image": ""
   },
   {
+     "filename": "cve-2025-62674.md",
+     "title": "CVE-2025-62674 Unauthenticated Access To Real Time Streaming Protocol (RTSP) Services",
+     "category": "My CVEs",
+     "image": ""
+  },
+  {
+     "filename": "cve-2025-64770.md",
+     "title": "CVE-2025-64770 Unauthenticated Access To Open Network Video Interface Forum (ONVIF) Services",
+     "category": "My CVEs",
+     "image": ""
+  },
+  {
      "filename": "cve-2025-10295.md",
      "title": "CVE-2025-10295 Stored Cross-Site-Scripting (XSS)",
      "category": "My CVEs",
