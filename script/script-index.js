@@ -483,6 +483,7 @@ async function renderPostLists() {
             const a = document.createElement("a");
             a.href = `#${post.filename.replace(".md", "")}`;
             a.classList.add("post-list-item");
+            a.dataset.tag = post.category || "Post";
 
             if (post.image) {
                 const img = document.createElement("img");
