@@ -31,13 +31,12 @@ function addCopyButtons() {
 
         btn.addEventListener('click', () => {
             const code = pre.querySelector('code');
-            const text = code ? code.innerText : pre.innerText;
+            const text = code ? code.textContent : pre.textContent;
 
-            navigator.clipboard.writeText(text).then(() => {
-                btn.innerHTML = svgCheck();
-                setTimeout(() => {
-                    btn.innerHTML = svgCopy();
-                }, 1500);
+            navigator.clipboard.writeText(raw).then(() => {
+                    btn.innerHTML = svgCheck();
+                    setTimeout(() => btn.innerHTML = svgCopy(), 1500);
+                });
             });
         });
 
