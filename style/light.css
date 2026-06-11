@@ -188,30 +188,6 @@ main {
 	width: 100%;
 }
 
-
-/* === Danh sách bài viết (li trong ul) === */
-
-ul li a {
-	display: block;
-	padding: 0.75em 1em;
-	margin: 0.5em 0;
-	border-radius: 8px;
-	background-color: #dad0d0;
-	color: #0d47a1;
-	text-decoration: none;
-	font-weight: 500;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-	transition: all 0.2s ease;
-}
-
-ul li a:hover {
-	background-color: #e3f2fd;
-	color: #1565c0;
-	text-decoration: none;
-	transform: translateY(-1px);
-}
-
-
 /* === Scroll to Top button === */
 
 #scrollToTop {
@@ -290,6 +266,65 @@ footer {
 #markdown-content pre code {
     white-space: pre;
     display: block;
+}
+
+/* === Post list on homepage only === */
+.section-container ul li a {
+    display: block;
+    padding: 0.75em 1em;
+    margin: 0.5em 0;
+    border-radius: 8px;
+    background-color: #dad0d0;
+    color: #0d47a1;
+    text-decoration: none;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.section-container ul li a:hover {
+    background-color: #e3f2fd;
+    color: #1565c0;
+    transform: translateY(-1px);
+}
+
+/* === References links inside markdown === */
+#markdown-content ul li a {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    color: #007acc;
+    font-weight: 400;
+    transform: none;
+}
+
+#markdown-content ul li a:hover {
+    text-decoration: underline;
+    background: none;
+    transform: none;
+}
+
+/* === Read More section === */
+#recommendations ul li a {
+    display: block;
+    padding: 0.5em 0.75em;
+    margin: 0.3em 0;
+    border-radius: 6px;
+    background: none;
+    border-left: 3px solid #007acc;
+    color: #007acc;
+    font-weight: 400;
+    box-shadow: none;
+    transition: all 0.15s ease;
+}
+
+#recommendations ul li a:hover {
+    background: rgba(0, 122, 204, 0.06);
+    padding-left: 1em;
+    transform: none;
 }
 
 
