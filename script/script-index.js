@@ -31,11 +31,16 @@ function addCopyButtons() {
 
         btn.addEventListener('click', () => {
             const code = pre.querySelector('code');
-            const text = code ? code.textContent : pre.textContent;
-
-            navigator.clipboard.writeText(raw).then(() => {
-                    btn.innerHTML = svgCheck();
-                    setTimeout(() => btn.innerHTML = svgCopy(), 1500);
+            const raw = code ? code.textContent : pre.textContent;
+        
+            // Decode HTML entities (&#39; → ', &amp; → &, etc.)
+            const txt = document.createElement('textarea');
+            txt.innerHTML = raw;
+            const text = txt.value;
+        
+            navigator.clipboard.writeText(text).then(() => {
+                btn.innerHTML = svgCheck();
+                setTimeout(() => btn.innerHTML = svgCopy(), 1500);
             });
         });
 
