@@ -38,9 +38,6 @@ window.initLibraries = async function() {
   // JavaScript (base for Node.js & TypeScript)
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js', '', 'anonymous');
 
-  // Node.js
-  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-node.min.js', '', 'anonymous');
-
   // TypeScript (requires javascript first)
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js', '', 'anonymous');
 
