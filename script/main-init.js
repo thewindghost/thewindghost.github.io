@@ -1,3 +1,18 @@
+function loadScript(src, integrity = '', crossorigin = '') {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    if (integrity) s.integrity = integrity;
+    if (crossorigin) {
+      s.crossOrigin = crossorigin;
+      s.referrerPolicy = 'no-referrer';
+    }
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
 window.initLibraries = async function() {
   
   await loadScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js');
