@@ -174,11 +174,11 @@ async function loadPost(file, container, main, toc, toggleBtn) {
 
     marked.use({
     renderer: {
-        code(code, lang) {
+        code({ text, lang }) {
             const language = lang && Prism.languages[lang] ? lang : 'plaintext';
             const highlighted = Prism.languages[language]
-                ? Prism.highlight(code, Prism.languages[language], language)
-                : code;
+                ? Prism.highlight(text, Prism.languages[language], language)
+                : text;
             return `<pre class="language-${language}"><code class="language-${language}">${highlighted}</code></pre>`;
             }
         }
