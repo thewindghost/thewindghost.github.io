@@ -1,7 +1,13 @@
 [
   {
      "filename": "cve-2025-23001.md",
-     "title": "CVE-2025-23001 Host Header Injection",
+     "title": "CVE-2025-23001 Host Header Injection ",
+     "category": "My CVEs",
+     "image": ""
+  },
+  {
+     "filename": "cve-2025-10295.md",
+     "title": "CVE-2025-10295 Stored Cross-Site-Scripting (XSS)",
      "category": "My CVEs",
      "image": ""
   },
