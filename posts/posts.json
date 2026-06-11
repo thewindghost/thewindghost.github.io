@@ -47,14 +47,24 @@
      "category": "Bug Bounty",
      "image": ""
   },
-  
   {
      "filename": "dom_based_open_redirect.md",
      "title": "DOM-Based Redirect Lab Solved Via Unintended Path",
      "category": "Security Research (other)",
      "image": ""
   },
-  
+  {
+     "filename": "spel-injection-ssti.md",
+     "title": "Spel Injection - Server-Side Template Injection (SSTI)",
+     "category": "Security Research (other)",
+     "image": ""
+  },
+  {
+     "filename": "Infinite-Loop-With-Kafka-SQL.md",
+     "title": "Infinite Loop With Kafka SQL (KSQL)",
+     "category": "Security Research (other)",
+     "image": ""
+  },
   {
      "filename": "piano.md",
      "title": "Piano",
