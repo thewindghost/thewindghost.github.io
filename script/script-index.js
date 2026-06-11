@@ -2,18 +2,6 @@ let themeLink, tocList, postTime;
 let allPosts = [];
 let currentFetchController = null;
 
-marked.use({
-    renderer: {
-        code(code, lang) {
-            const language = lang && Prism.languages[lang] ? lang : 'plaintext';
-            const highlighted = Prism.languages[language]
-                ? Prism.highlight(code, Prism.languages[language], language)
-                : code;
-            return `<pre class="language-${language}"><code class="language-${language}">${highlighted}</code></pre>`;
-        }
-    }
-});
-
 // Copy Buttons
 function addCopyButtons() {
     const codeBlocks = document.querySelectorAll('#markdown-content pre');
@@ -183,6 +171,18 @@ function loadMarkdown() {
 }
 
 async function loadPost(file, container, main, toc, toggleBtn) {
+
+    marked.use({
+    renderer: {
+        code(code, lang) {
+            const language = lang && Prism.languages[lang] ? lang : 'plaintext';
+            const highlighted = Prism.languages[language]
+                ? Prism.highlight(code, Prism.languages[language], language)
+                : code;
+            return `<pre class="language-${language}"><code class="language-${language}">${highlighted}</code></pre>`;
+            }
+        }
+    });
     
     if (currentFetchController) {
         currentFetchController.abort();
