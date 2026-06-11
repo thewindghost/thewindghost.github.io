@@ -36,7 +36,6 @@ function addCopyButtons() {
             navigator.clipboard.writeText(raw).then(() => {
                     btn.innerHTML = svgCheck();
                     setTimeout(() => btn.innerHTML = svgCopy(), 1500);
-                });
             });
         });
 
