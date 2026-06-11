@@ -36,12 +36,6 @@
      "image": ""
   },
   {
-     "filename": "all_in_one_burp_suite_settings.md",
-     "title": "All-in-One My Burp-Suite Settings",
-     "category": "Automation Tools, Tips & Tricks",
-     "image": ""
-  },
-  {
      "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug-en.md",
      "title": "SSRF-induced-Cache-Poisoning-Logic-Bug(en)",
      "category": "Bug Bounty",
@@ -63,6 +57,12 @@
      "filename": "Infinite-Loop-With-Kafka-SQL.md",
      "title": "Infinite Loop With Kafka SQL (KSQL)",
      "category": "Security Research (other)",
+     "image": ""
+  },
+  {
+     "filename": "all_in_one_burp_suite_settings.md",
+     "title": "All-in-One My Burp-Suite Settings",
+     "category": "Automation Tools, Tips & Tricks",
      "image": ""
   },
   {
