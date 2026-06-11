@@ -6,6 +6,12 @@
      "image": ""
   },
   {
+     "filename": "cve-2025-29419.md",
+     "title": "CVE-2025-29419 Man-in-the-middle (MITM)",
+     "category": "My CVEs",
+     "image": ""
+  },
+  {
      "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug-vi.md",
      "title": "SSRF-induced Cache Poisoning Logic Bug(vi)",
      "category": "Bug Bounty",
