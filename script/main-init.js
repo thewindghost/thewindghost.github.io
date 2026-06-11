@@ -33,6 +33,7 @@ window.initLibraries = async function() {
   // PHP (requires markup + clike first)
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js', '', 'anonymous');
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js', '', 'anonymous');
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup-templating.min.js', '', 'anonymous');
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js', '', 'anonymous');
 
   // JavaScript (base for Node.js & TypeScript)
