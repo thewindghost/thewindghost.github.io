@@ -100,21 +100,24 @@ function renderRecommendations(currentSlug) {
     const sec = document.createElement("section");
     sec.id = "recommendations";
 
-    const h3 = document.createElement("h2");
-    h3.textContent = "Read More";
-    sec.appendChild(h3);
+    const title = document.createElement("p");
+    title.className = "read-more-title";
+    title.textContent = "Read More";
+    sec.appendChild(title);
 
-    const ul = document.createElement("ul");
+    const grid = document.createElement("div");
+    grid.className = "read-more-grid";
+
     recs.forEach((r) => {
-        const li = document.createElement("li");
         const a = document.createElement("a");
         a.href = `#${r.filename.replace(".md", "")}`;
-        a.textContent = r.title;
-        li.appendChild(a);
-        ul.appendChild(li);
+        a.className = "read-more-card";
+        const tag = r.category || "Post";
+        a.innerHTML = `${r.title}<span class="read-more-tag">${tag}</span>`;
+        grid.appendChild(a);
     });
 
-    sec.appendChild(ul);
+    sec.appendChild(grid);
     if (main) main.appendChild(sec);
 }
 
@@ -205,18 +208,39 @@ async function loadPost(file, container, main, toc, toggleBtn) {
 
         const { metadata, content } = extractFrontMatter(md);
 
-        if (metadata.date && postTime) {
-            const dt = parseCustomDate(metadata.date);
-            
-            if (dt && !isNaN(dt.getTime())) {
-                postTime.textContent = `Last Update: ${dt.toLocaleString()}`;
-                postTime.style.display = "block";
-            } else {
-                console.error("Invalid date format:", metadata.date);
-                postTime.style.display = "none";
-            }
-        } else if (postTime) {
-            postTime.style.display = "none";
+        if (postTime) {
+            const dt = metadata.date ? parseCustomDate(metadata.date) : null;
+            const dateStr = dt && !isNaN(dt.getTime())
+                ? dt.toLocaleDateString('en-GB', { day:'2-digit', month:'2-digit', year:'numeric' })
+                : null;
+        
+            const updatedStr = metadata.updated
+                ? parseCustomDate(metadata.updated)?.toLocaleDateString('en-GB', { day:'2-digit', month:'2-digit', year:'numeric' })
+                : null;
+        
+            const category = metadata.category || '';
+            const author = metadata.author || 'TheWindGhost';
+            const coauthors = metadata.coauthors ? metadata.coauthors.split(',').map(s => s.trim()) : [];
+            const initials = author.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+        
+            postTime.innerHTML = `
+                <div class="post-meta-card">
+                    <div class="post-meta-badges">
+                        ${category ? `<span class="badge badge-blue">${category}</span>` : ''}
+                        ${dateStr ? `<span class="badge badge-green">Published ${dateStr}</span>` : ''}
+                        ${updatedStr ? `<span class="badge badge-amber">Updated ${updatedStr}</span>` : ''}
+                    </div>
+                    <div class="post-meta-author">
+                        <span class="author-avatar">${initials}</span>
+                        <span>Posted by <strong>${author}</strong></span>
+                    </div>
+                    ${coauthors.length ? `
+                    <div class="post-meta-coauthors">
+                        Report co-authors: ${coauthors.map(c => `<span class="coauthor">${c}</span>`).join(', ')}
+                    </div>` : ''}
+                </div>
+            `;
+            postTime.style.display = 'block';
         }
 
         const html = marked.parse(content);
