@@ -466,5 +466,70 @@ footer {
 .footer-copy strong {
     color: #c0392b;
 }
+/* === Header === */
+header {
+    background: #003366;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
 
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
+.header-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+}
+
+.header-title:hover {
+    text-decoration: none;
+    color: #fff;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.header-nav a {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.15s;
+}
+
+.header-nav a:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    text-decoration: none;
+}
+
+#toggleWidthBtn {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+#toggleWidthBtn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
