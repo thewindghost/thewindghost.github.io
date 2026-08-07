@@ -18,12 +18,6 @@
      "image": ""
   },
   {
-     "filename": "cve-2025-10295.md",
-     "title": "CVE-2025-10295 Stored Cross-Site-Scripting (XSS)",
-     "category": "My CVEs",
-     "image": ""
-  },
-  {
      "filename": "cve-2025-29419.md",
      "title": "CVE-2025-29419 Man-in-the-middle (MITM)",
      "category": "My CVEs",
