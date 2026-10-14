@@ -505,7 +505,14 @@ async function renderPostLists() {
 
             const li = document.createElement("li");
             const a = document.createElement("a");
-            a.href = `#${post.filename.replace(".md", "")}`;
+            const isExternalUrl = /^https?:\/\//i.test(post.filename);
+            if (isExternalUrl) {
+                a.href = post.filename;
+                a.target = "_blank";
+                a.rel = "noopener noreferrer";
+            } else {
+                a.href = `#${post.filename.replace(".md", "")}`;
+            }
             a.classList.add("post-list-item");
             a.dataset.tag = post.category || "Post";
 
