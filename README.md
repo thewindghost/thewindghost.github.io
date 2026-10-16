@@ -1,4 +1,4 @@
-Copyright © 2025 thewindghost
+Copyright © 2026 thewindghost
 
 This repository contains original written content. All rights reserved.
 The text, posts, and articles in this repository are protected by copyright law.
