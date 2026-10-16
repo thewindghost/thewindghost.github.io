@@ -24,6 +24,12 @@
      "image": ""
   },
   {
+     "filename": "cve-2025-10295.md",
+     "title": "CVE 2025 10295 Stored Cross-Site-Scripting (XSS)",
+     "category": "My CVEs",
+     "image": ""
+  },
+  {
      "filename": "https://hackerone.com/reports/4053546",
      "title": "Information Disclosure - Private Content Leaked",
      "category": "Bug Bounty",
