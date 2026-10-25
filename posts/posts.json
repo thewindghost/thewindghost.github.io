@@ -66,6 +66,30 @@
      "image": ""
   },
   {
+     "filename": "buddypress-referer-group-membership-disclosure.md",
+     "title": "Hidden Group Membership Exposed via Referer Header Spoofing",
+     "category": "Bug Bounty",
+     "image": ""
+  },
+  {
+     "filename": "buddypress-rest-api-comment-injection.md",
+     "title": "Inject Comments into Private Group Activity via REST API Parameter Omission",
+     "category": "Bug Bounty",
+     "image": ""
+  },
+  {
+     "filename": "buddypress-hidden-group-access-bypass.md",
+     "title": "Enumerate and Join Hidden Groups via Chained Access Control Bugs",
+     "category": "Bug Bounty",
+     "image": ""
+  },
+  {
+     "filename": "buddypress-unauthenticated-inbox-disclosure.md",
+     "title": "Unauthenticated Private Message Inbox Disclosure via Legacy AJAX Handler",
+     "category": "Bug Bounty",
+     "image": ""
+  },
+  {
      "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug-en.md",
      "title": "SSRF-induced-Cache-Poisoning-Logic-Bug",
      "category": "Bug Bounty",
