@@ -42,6 +42,12 @@
      "image": ""
   },
   {
+     "filename": "BuddyPress_Any_Member_Can_Cancel_or_Resend_Another_User_is_Invitations_IDOR.md",
+     "title": "BuddyPress: Any Member Can Cancel or Resend Another User's Invitations (IDOR)",
+     "category": "Bug Bounty",
+     "image": ""
+  },
+  {
      "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug-en.md",
      "title": "SSRF-induced-Cache-Poisoning-Logic-Bug",
      "category": "Bug Bounty",
