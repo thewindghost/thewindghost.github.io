@@ -48,6 +48,12 @@
      "image": ""
   },
   {
+     "filename": "buddypress-path-traversal-avatar.md",
+     "title": "Path Traversal via Unicode Filename Transliteration in Avatar Upload",
+     "category": "Bug Bounty",
+     "image": ""
+  },
+  {
      "filename": "BuddyPress_Delete_Another_User_is_Private_Messages_via_Mismatched_Auth_Target.md",
      "title": "Delete Another User's Private Messages via Mismatched Auth Target",
      "category": "Bug Bounty",
