@@ -43,7 +43,7 @@
   },
   {
      "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug-en.md",
-     "title": "SSRF-induced-Cache-Poisoning-Logic-Bug(en)",
+     "title": "SSRF-induced-Cache-Poisoning-Logic-Bug",
      "category": "Bug Bounty",
      "image": ""
   },
