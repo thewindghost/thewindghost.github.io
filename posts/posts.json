@@ -37,19 +37,19 @@
   },
   {
      "filename": "SQLite_Database_Integration_Full_DB_Downloadable_Unauthenticated.md",
-     "title": "SQLite Database Integration: Full DB Downloadable Unauthenticated",
+     "title": "Full DB Downloadable Unauthenticated",
      "category": "Bug Bounty",
      "image": ""
   },
   {
      "filename": "BuddyPress_Any_Member_Can_Cancel_or_Resend_Another_User_is_Invitations_IDOR.md",
-     "title": "BuddyPress: Any Member Can Cancel or Resend Another User's Invitations (IDOR)",
+     "title": "Any Member Can Cancel or Resend Another User's Invitations (IDOR)",
      "category": "Bug Bounty",
      "image": ""
   },
   {
      "filename": "BuddyPress_Delete_Another_User_is_Private_Messages_via_Mismatched_Auth_Target.md",
-     "title": "BuddyPress: Delete Another User's Private Messages via Mismatched Auth Target",
+     "title": "Delete Another User's Private Messages via Mismatched Auth Target",
      "category": "Bug Bounty",
      "image": ""
   },
