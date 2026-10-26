@@ -785,7 +785,7 @@ footer {
 }
 
 .footer-copy {
-    font-size: 17px;
+    font-size: 12px;
     color: var(--dark-text-dim);
     line-height: 1.6;
 }
