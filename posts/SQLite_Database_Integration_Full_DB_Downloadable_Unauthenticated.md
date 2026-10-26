@@ -3,7 +3,7 @@ WordPress's SQLite Database Integration plugin stores the live database file at
 `wp-content/database/.ht.sqlite` — inside the web root. Its only protection is
 an Apache `.htaccess` rule that Nginx silently ignores. One unauthenticated HTTP
 GET returns the entire database: password hashes, session tokens, all content.
-Worse, upgrading from v<3.0.0 actively strips the one protection that *did* work
+Worse, upgrading from v<3.0.0 actively strips the one protection that did work
 on Nginx (the old `.php` extension), with no warning to the admin.
 
 **One request. No credentials. Full database.**
