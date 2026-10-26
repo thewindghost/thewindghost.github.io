@@ -758,7 +758,7 @@ body.focus-mode main {
 
 footer {
     border-top: 1px solid var(--dark-border);
-    padding: 20px 0 8px;
+    padding: 28px 16px 20px;
     text-align: center;
     background: transparent;
     color: var(--dark-text-dim);
@@ -785,8 +785,9 @@ footer {
 }
 
 .footer-copy {
-    font-size: 11.5px;
+    font-size: 17px;
     color: var(--dark-text-dim);
+    line-height: 1.6;
 }
 
 .footer-copy strong {
