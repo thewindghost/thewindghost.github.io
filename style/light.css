@@ -22,7 +22,7 @@ body {
 }
 
 a {
-	color: #007acc;
+	color: var(--accent-green);
 	text-decoration: none;
 }
 
@@ -31,17 +31,28 @@ a:hover {
 }
 
 code {
-	background: #eaeef3;
+	background: var(--dark-bg-raised);
+	color: var(--dark-text-bright);
+	border: 1px solid var(--dark-border-soft);
 	padding: 2px 6px;
 	border-radius: 5px;
 	font-family: 'Courier New', monospace;
 }
 
 pre {
-	background: #eaeef3;
+	background: var(--dark-panel);
+	border: 1px solid var(--dark-border);
 	padding: 1em;
 	overflow-x: auto;
-	border-left: 4px solid #007acc;
+	border-left: 4px solid var(--accent-green);
+	border-radius: 0 6px 6px 0;
+	margin: 1.25em 0;
+}
+
+pre code {
+	background: none;
+	border: none;
+	padding: 0;
 }
 
 h1,
@@ -50,18 +61,37 @@ h3,
 h4,
 h5,
 h6 {
-	color: #003366;
+	color: var(--dark-text-bright);
 	margin-top: 1.5em;
-	border-bottom: 2px solid #ccc;
+	line-height: 1.35;
+}
+
+h1,
+h2 {
+	border-bottom: 2px solid var(--dark-border);
 	padding-bottom: 0.3em;
 }
 
+h3,
+h4,
+h5,
+h6 {
+	margin-top: 1.3em;
+	margin-bottom: 0.4em;
+}
+
 blockquote {
-	border-left: 4px solid #007acc;
-	padding-left: 1em;
-	background: #f0f8ff;
-	color: #003366;
-	margin: 1em 0;
+	border-left: 4px solid var(--dark-border);
+	padding: 0.75em 1em;
+	background: var(--dark-bg-raised);
+	color: var(--dark-text);
+	margin: 1.25em 0;
+	border-radius: 0 6px 6px 0;
+	font-style: italic;
+}
+
+blockquote p {
+	margin: 0.3em 0;
 }
 
 table {
@@ -73,14 +103,14 @@ table {
 table,
 th,
 td {
-	border: 1px solid #ccc;
+	border: 1px solid var(--dark-border);
 	padding: 0.5em;
 	text-align: left;
 }
 
 hr {
 	border: none;
-	border-top: 1px dashed #aaa;
+	border-top: 1px dashed var(--dark-border);
 	margin: 2em 0;
 }
 
@@ -88,6 +118,7 @@ hr {
 
 .site-container {
 	display: flex;
+	justify-content: center;
 	gap: 2em;
 	max-width: 1400px;
 	margin: 2em auto;
@@ -97,6 +128,7 @@ hr {
 main {
 	flex: 1;
 	min-width: 0;
+	max-width: 860px;
 	word-break: break-word;
 	overflow-wrap: break-word;
 }
@@ -113,9 +145,10 @@ main {
     min-width: 200px;
     max-width: 280px;
     padding: 1em;
-    background: #fff;
+    background: var(--dark-panel);
+    border: 1px solid var(--dark-border);
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: none;
 }
 
 #toc h2 {
@@ -123,7 +156,7 @@ main {
     font-size: 0.85em;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #888;
+    color: var(--dark-text-dim);
     border-bottom: none;
     padding-bottom: 0.5em;
     margin-bottom: 0.5em;
@@ -133,7 +166,7 @@ main {
     list-style: none;
     padding-left: 0;
     margin: 0;
-    border-left: 2px solid #e0e0e0;
+    border-left: 2px solid var(--dark-border);
 }
 
 #toc li {
@@ -144,7 +177,7 @@ main {
     display: block;
     font-size: 13px;
     line-height: 1.4;
-    color: #555;
+    color: var(--dark-text-dim);
     text-decoration: none;
     padding: 5px 10px;
     border-left: 2px solid transparent;
@@ -159,35 +192,42 @@ main {
 }
 
 #toc a:hover {
-    color: #003366;
-    border-left-color: #007acc;
-    background: rgba(0, 122, 204, 0.05);
+    color: var(--accent-green);
+    border-left-color: var(--accent-green);
+    background: rgba(57, 217, 138, 0.06);
     text-decoration: none;
     transform: none;
 }
 
 #toc a.active {
-    color: #003366;
-    border-left-color: #007acc;
-    background: rgba(0, 122, 204, 0.07);
+    color: var(--accent-green);
+    border-left-color: var(--accent-green);
+    background: rgba(57, 217, 138, 0.08);
     font-weight: 500;
 }
 
 /* === Vùng nội dung Markdown === */
 
 #markdown-content {
-	background: #fff;
-	padding: 2em;
-	border-radius: 4px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	color: #1e2a38;
+	background: var(--dark-panel);
+	border: 1px solid var(--dark-border);
+	padding: 2.25em 2.5em;
+	border-radius: 8px;
+	box-shadow: none;
+	color: var(--dark-text);
 	max-width: 100%;
+	font-size: 15.5px;
 }
 
 #markdown-content img {
 	max-width: 100%;
+	max-height: 520px;
+	width: auto;
 	height: auto;
 	display: block;
+	margin: 1.5em auto;
+	border-radius: 6px;
+	border: 1px solid var(--dark-border);
 }
 
 /* === Toggle giữa full / normal width === */
@@ -210,15 +250,16 @@ main {
 	right: 20px;
 	padding: 0.5em 1em;
 	font-size: 1em;
-	background: #007acc;
-	color: #fff;
+	background: var(--accent-green);
+	color: var(--dark-bg);
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
+	font-weight: 600;
 }
 
 #scrollToTop:hover {
-	background: #005f99;
+	opacity: 0.85;
 }
 
 /* === Post time box === */
@@ -228,8 +269,8 @@ main {
 }
 
 .post-meta-card {
-    background: #fff;
-    border: 0.5px solid #dde2ea;
+    background: var(--dark-panel);
+    border: 1px solid var(--dark-border);
     border-radius: 8px;
     padding: 14px 18px;
     display: flex;
@@ -250,41 +291,41 @@ main {
     font-weight: 500;
 }
 
-.badge-blue  { background: #e6f1fb; color: #185FA5; }
-.badge-green { background: #e1f5ee; color: #0F6E56; }
-.badge-amber { background: #faeeda; color: #854F0B; }
+.badge-blue  { background: rgba(77, 179, 255, 0.12); color: #7ec8ff; }
+.badge-green { background: rgba(57, 217, 138, 0.12); color: var(--accent-green); }
+.badge-amber { background: rgba(232, 183, 101, 0.12); color: #e8b765; }
 
 .post-meta-author {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 13px;
-    color: #555;
+    color: var(--dark-text-dim);
 }
 
 .author-avatar {
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: #e6f1fb;
+    background: var(--dark-bg-raised);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 11px;
     font-weight: 600;
-    color: #185FA5;
+    color: var(--accent-green);
     flex-shrink: 0;
 }
 
 .post-meta-coauthors {
-    border-top: 0.5px solid #eee;
+    border-top: 1px solid var(--dark-border);
     padding-top: 10px;
     font-size: 13px;
-    color: #555;
+    color: var(--dark-text-dim);
 }
 
 .coauthor {
-    color: #003366;
+    color: var(--accent-green);
     font-weight: 500;
 }
 
@@ -539,20 +580,20 @@ main {
 
 /* === Homepage post listing === */
 .listing {
-    column-width: 320px;
+    column-width: 360px;
     column-gap: 14px;
 }
 
 .row {
     display: block;
     break-inside: avoid;
-    margin-bottom: 6px;
-    padding: 7px 12px;
+    margin-bottom: 8px;
+    padding: 10px 14px;
     background: var(--dark-bg-raised);
     border: 1px solid var(--dark-border-soft);
     border-radius: 4px;
     color: var(--dark-text);
-    font-size: 12.5px;
+    font-size: 14.5px;
     text-decoration: none;
     line-height: 1.5;
     transition: border-color 0.12s, opacity 0.12s;
@@ -575,7 +616,7 @@ main {
 
 .row .idx {
     font-family: var(--mono-font);
-    font-size: 11px;
+    font-size: 12px;
     color: var(--dark-text-dim);
     flex-shrink: 0;
 }
@@ -590,7 +631,7 @@ main {
 
 .row .tag {
     font-family: var(--mono-font);
-    font-size: 10px;
+    font-size: 11px;
     color: var(--dark-text-dim);
     border: 1px solid var(--dark-border-soft);
     border-radius: 3px;
@@ -618,14 +659,15 @@ main {
 
 #recommendations {
     margin-bottom: 2rem;
-    border-top: 2px solid #e0e4ea;
+    border-top: 1px solid var(--dark-border);
     padding-top: 16px;
 }
 
 .read-more-title {
-    font-size: 13px;
+    font-family: var(--mono-font);
+    font-size: 12px;
     font-weight: 600;
-    color: #888;
+    color: var(--dark-text-dim);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin-bottom: 12px;
@@ -640,26 +682,29 @@ main {
 .read-more-card {
     display: block;
     padding: 10px 12px;
-    background: #fff;
-    border: 0.5px solid #dde2ea;
+    background: var(--dark-bg-raised);
+    border: 1px solid var(--dark-border-soft);
     border-radius: 8px;
-    color: #003366;
+    color: var(--dark-text);
     font-size: 13px;
+    font-weight: 500;
     text-decoration: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition: border-color 0.15s;
 }
 
 .read-more-card:hover {
-    border-color: #378ADD;
-    box-shadow: 0 0 0 2px rgba(55, 138, 221, 0.1);
+    border-color: var(--accent-green);
+    color: var(--dark-text-bright);
     text-decoration: none;
 }
 
 .read-more-tag {
     display: block;
+    font-family: var(--mono-font);
     font-size: 11px;
-    color: #185FA5;
-    background: #e6f1fb;
+    color: var(--dark-text-dim);
+    background: none;
+    border: 1px solid var(--dark-border-soft);
     border-radius: 4px;
     padding: 1px 6px;
     margin-top: 6px;

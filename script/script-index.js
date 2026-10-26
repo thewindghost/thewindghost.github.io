@@ -24,8 +24,8 @@ function addCopyButtons() {
             position: 'absolute',
             top: '8px',
             right: '8px',
-            background: 'rgba(0,0,0,0.08)',
-            border: '1px solid rgba(0,0,0,0.2)',
+            background: 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.15)',
             borderRadius: '6px',
             padding: '6px 8px',
             cursor: 'pointer',
@@ -54,7 +54,7 @@ function addCopyButtons() {
 function svgCopy() {
     return `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        style="color:#444">
+        style="color:#c7d2db"
         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>`;
@@ -491,16 +491,40 @@ function createCategorySectionAtTop(category) {
     sectionContainer.appendChild(section);
 }
 
-function renderHeroStats(posts) {
+// Stats line is built from posts.json's own `category` field — no extra
+// field needed. `statsExclude`/`statsLabels` are read from posts.json's
+// top-level config: list a category in statsExclude to leave it out of
+// the line entirely (it's still counted in the "Write-ups" total), and
+// give it an entry in statsLabels to show a nicer name than the raw
+// category string.
+function renderHeroStats(posts, statsExclude, statsLabels) {
     const el = document.getElementById("heroStats");
     if (!el) return;
 
-    const total = posts.length;
-    const cveCount = posts.filter((p) => p.category === "My CVEs").length;
-    const bountyCount = posts.filter((p) => p.category === "Bug Bounty").length;
+    const exclude = statsExclude || [];
+    const labels = statsLabels || {};
     const pad = (n) => String(n).padStart(2, "0");
+    const counts = {};
+    const order = [];
 
-    el.innerHTML = `Published: <b>${pad(cveCount)}</b> CVEs<span class="sep">|</span><b>${pad(bountyCount)}</b> Bug Bounty Reports<span class="sep">|</span><b>${pad(total)}</b> Write-ups`;
+    posts.forEach((post) => {
+        const category = post.category || "Uncategorized";
+        if (exclude.includes(category)) return;
+
+        if (!(category in counts)) {
+            counts[category] = 0;
+            order.push(category);
+        }
+        counts[category] += 1;
+    });
+
+    const parts = order.map((category) => {
+        const label = labels[category] || formatCategoryTitle(category);
+        return `<b>${pad(counts[category])}</b> ${label}`;
+    });
+    parts.push(`<b>${pad(posts.length)}</b> Write-ups`);
+
+    el.innerHTML = "Published: " + parts.join('<span class="sep">|</span>');
 }
 
 function renderFeatured(posts) {
@@ -624,10 +648,14 @@ async function renderPostLists() {
         const res = await fetch("/posts/posts.json", { cache: "no-store" });
         if (!res.ok) throw new Error("Không thể load posts.json");
 
-        const posts = await res.json();
+        const data = await res.json();
+        const posts = Array.isArray(data) ? data : (data.posts || []);
         allPosts = posts;
 
-        renderHeroStats(posts);
+        const statsExclude = Array.isArray(data.statsExclude) ? data.statsExclude : [];
+        const statsLabels = data.statsLabels || {};
+
+        renderHeroStats(posts, statsExclude, statsLabels);
         renderFeatured(posts);
         renderFilterBar(posts);
 

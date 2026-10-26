@@ -1,42 +1,49 @@
-[
+{
+  "statsExclude": ["Automation Tools, Tips & Tricks", "Musics"],
+  "statsLabels": {
+    "My CVEs": "CVEs",
+    "Bug Bounty": "Bug Bounty Reports",
+    "Security Research (other)": "Security Research"
+  },
+  "posts": [
   {
      "filename": "cve-2025-23001.md",
-     "title": "CVE-2025-23001 Host Header Injection ",
+     "title": "Host Header Injection",
      "category": "My CVEs",
      "image": "",
-     "tags": ["Host Header Injection"],
+     "tags": ["CVE-2025-23001", "Host Header Injection"],
      "featured": true
   },
   {
      "filename": "cve-2025-62674.md",
-     "title": "CVE-2025-62674 Unauthenticated Access To Real Time Streaming Protocol (RTSP) Services",
+     "title": "Unauthenticated Access to RTSP Services",
      "category": "My CVEs",
      "image": "",
-     "tags": ["RTSP", "Unauthenticated Access"],
+     "tags": ["CVE-2025-62674", "RTSP", "Unauthenticated Access"],
      "featured": false
   },
   {
      "filename": "cve-2025-64770.md",
-     "title": "CVE-2025-64770 Unauthenticated Access To Open Network Video Interface Forum (ONVIF) Services",
+     "title": "Unauthenticated Access to ONVIF Services",
      "category": "My CVEs",
      "image": "",
-     "tags": ["ONVIF", "Unauthenticated Access"],
+     "tags": ["CVE-2025-64770", "ONVIF", "Unauthenticated Access"],
      "featured": true
   },
   {
      "filename": "cve-2025-29419.md",
-     "title": "CVE-2025-29419 Man-in-the-middle (MITM)",
+     "title": "Man-in-the-Middle (MITM)",
      "category": "My CVEs",
      "image": "",
-     "tags": ["MITM"],
+     "tags": ["CVE-2025-29419", "MITM"],
      "featured": false
   },
   {
      "filename": "cve-2025-10295.md",
-     "title": "CVE 2025 10295 Stored Cross-Site-Scripting (XSS)",
+     "title": "Stored Cross-Site Scripting (XSS)",
      "category": "My CVEs",
      "image": "",
-     "tags": ["XSS"],
+     "tags": ["CVE-2025-10295", "XSS"],
      "featured": true
   },
   {
@@ -57,7 +64,7 @@
   },
   {
      "filename": "BuddyPress_Any_Member_Can_Cancel_or_Resend_Another_User_is_Invitations_IDOR.md",
-     "title": "Any Member Can Cancel or Resend Another User's Invitations (IDOR)",
+     "title": "Cancel/Resend Another User's Invitations (IDOR)",
      "category": "Bug Bounty",
      "image": "",
      "tags": ["IDOR"],
@@ -65,7 +72,7 @@
   },
   {
      "filename": "buddypress-path-traversal-avatar.md",
-     "title": "Path Traversal via Unicode Filename Transliteration in Avatar Upload",
+     "title": "Path Traversal via Filename Transliteration (Avatar Upload)",
      "category": "Bug Bounty",
      "image": "",
      "tags": ["Path Traversal"],
@@ -73,7 +80,7 @@
   },
   {
      "filename": "BuddyPress_Delete_Another_User_is_Private_Messages_via_Mismatched_Auth_Target.md",
-     "title": "Delete Another User's Private Messages via Mismatched Auth Target",
+     "title": "Delete Private Messages via Mismatched Auth Target",
      "category": "Bug Bounty",
      "image": "",
      "tags": ["Access Control"],
@@ -81,7 +88,7 @@
   },
   {
      "filename": "buddypress-unauthenticated-group-requests.md",
-     "title": "Unauthenticated Disclosure of Private Group Membership Requests",
+     "title": "Private Group Membership Requests Disclosure",
      "category": "Bug Bounty",
      "image": "",
      "tags": ["Information Disclosure", "Unauthenticated Access"],
@@ -89,7 +96,7 @@
   },
   {
      "filename": "buddypress-referer-group-membership-disclosure.md",
-     "title": "Hidden Group Membership Exposed via Referer Header Spoofing",
+     "title": "Hidden Group Membership via Referer Spoofing",
      "category": "Bug Bounty",
      "image": "",
      "tags": ["Information Disclosure"],
@@ -97,7 +104,7 @@
   },
   {
      "filename": "buddypress-rest-api-comment-injection.md",
-     "title": "Inject Comments into Private Group Activity via REST API Parameter Omission",
+     "title": "Inject Comments via REST API Parameter Omission",
      "category": "Bug Bounty",
      "image": "",
      "tags": ["Injection"],
@@ -105,7 +112,7 @@
   },
   {
      "filename": "buddypress-hidden-group-access-bypass.md",
-     "title": "Enumerate and Join Hidden Groups via Chained Access Control Bugs",
+     "title": "Enumerate/Join Hidden Groups via Chained Access Control",
      "category": "Bug Bounty",
      "image": "",
      "tags": ["Access Control"],
@@ -113,7 +120,7 @@
   },
   {
      "filename": "buddypress-unauthenticated-inbox-disclosure.md",
-     "title": "Unauthenticated Private Message Inbox Disclosure via Legacy AJAX Handler",
+     "title": "Private Message Inbox Disclosure via Legacy AJAX",
      "category": "Bug Bounty",
      "image": "",
      "tags": ["Information Disclosure", "Unauthenticated Access"],
@@ -121,7 +128,7 @@
   },
   {
      "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug-en.md",
-     "title": "SSRF-induced-Cache-Poisoning-Logic-Bug",
+     "title": "SSRF-Induced Cache Poisoning Logic Bug",
      "category": "Bug Bounty",
      "image": "",
      "tags": ["SSRF", "Cache Poisoning"],
@@ -129,7 +136,7 @@
   },
   {
      "filename": "dom_based_open_redirect.md",
-     "title": "DOM-Based Redirect Lab Solved Via Unintended Path",
+     "title": "DOM-Based Open Redirect via Unintended Path",
      "category": "Security Research (other)",
      "image": "",
      "tags": ["Open Redirect"],
@@ -137,7 +144,7 @@
   },
   {
      "filename": "spel-injection-ssti.md",
-     "title": "Spel Injection - Server-Side Template Injection (SSTI)",
+     "title": "Spel Injection (SSTI)",
      "category": "Security Research (other)",
      "image": "",
      "tags": ["SSTI"],
@@ -153,7 +160,7 @@
   },
   {
      "filename": "all_in_one_burp_suite_settings.md",
-     "title": "All-in-One My Burp-Suite Settings",
+     "title": "All-in-One Burp Suite Settings",
      "category": "Automation Tools, Tips & Tricks",
      "image": "",
      "tags": ["Tooling"],
@@ -167,4 +174,5 @@
      "tags": [],
      "featured": false
   }
-]
+  ]
+}
