@@ -310,9 +310,9 @@ main {
 }
 
 .section-container {
-	max-width: 880px;
+	max-width: 1480px;
 	margin: 0 auto;
-	padding: 0 1em;
+	padding: 0 2em;
 }
 
 .section-container section {
@@ -539,14 +539,8 @@ main {
 
 /* === Homepage post listing === */
 .listing {
-    column-count: 2;
-    column-gap: 12px;
-}
-
-@media (max-width: 680px) {
-    .listing {
-        column-count: 1;
-    }
+    column-width: 320px;
+    column-gap: 14px;
 }
 
 .row {
