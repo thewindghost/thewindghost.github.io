@@ -464,21 +464,159 @@ function createCategorySectionAtTop(category) {
 
     const section = document.createElement('section');
     const h2 = document.createElement('h2');
-    const ul = document.createElement('ul');
+    const listing = document.createElement('div');
 
     const titleText = formatCategoryTitle(category);
     const slug = slugify(titleText);
     h2.id = slug;
-    h2.textContent = titleText;
+    h2.className = 'path-head';
+
+    const name = document.createElement('span');
+    name.className = 'path-name';
+    name.textContent = titleText;
+    h2.appendChild(name);
+
+    const count = document.createElement('span');
+    count.className = 'count';
+    h2.appendChild(count);
 
     const copyIcon = createCopyLinkIcon(slug);
     h2.appendChild(copyIcon);
 
-    ul.id = categoryToId(category);
+    listing.className = 'listing';
+    listing.id = categoryToId(category);
 
     section.appendChild(h2);
-    section.appendChild(ul);
+    section.appendChild(listing);
     sectionContainer.appendChild(section);
+}
+
+function renderHeroStats(posts) {
+    const el = document.getElementById("heroStats");
+    if (!el) return;
+
+    const total = posts.length;
+    const cveCount = posts.filter((p) => p.category === "My CVEs").length;
+    const bountyCount = posts.filter((p) => p.category === "Bug Bounty").length;
+    const pad = (n) => String(n).padStart(2, "0");
+
+    el.innerHTML = `Published: <b>${pad(cveCount)}</b> CVEs<span class="sep">|</span><b>${pad(bountyCount)}</b> Bug Bounty Reports<span class="sep">|</span><b>${pad(total)}</b> Write-ups`;
+}
+
+function renderFeatured(posts) {
+    const section = document.getElementById("featuredSection");
+    const grid = document.getElementById("featuredGrid");
+    if (!section || !grid) return;
+
+    const featured = posts.filter((p) => p.featured);
+    grid.innerHTML = "";
+
+    if (!featured.length) {
+        section.style.display = "none";
+        return;
+    }
+
+    featured.forEach((post) => {
+        const a = document.createElement("a");
+        a.className = "featured-card";
+        const isExternalUrl = /^https?:\/\//i.test(post.filename);
+        if (isExternalUrl) {
+            a.href = post.filename;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+        } else {
+            a.href = `#${post.filename.replace(".md", "")}`;
+        }
+
+        const eyebrow = document.createElement("span");
+        eyebrow.className = "eyebrow";
+        eyebrow.textContent = (post.tags && post.tags[0]) || post.category || "";
+        a.appendChild(eyebrow);
+
+        const h3 = document.createElement("h3");
+        h3.textContent = post.title;
+        a.appendChild(h3);
+
+        const meta = document.createElement("span");
+        meta.className = "meta";
+        meta.textContent = post.category || "";
+        a.appendChild(meta);
+
+        grid.appendChild(a);
+    });
+
+    section.style.display = "";
+}
+
+let activeTags = [];
+
+function renderFilterBar(posts) {
+    const bar = document.getElementById("filterBar");
+    const toggle = document.getElementById("filterToggle");
+    if (!bar || !toggle) return;
+
+    const tagSet = [];
+    posts.forEach((p) => (p.tags || []).forEach((t) => {
+        if (!tagSet.includes(t)) tagSet.push(t);
+    }));
+
+    if (!tagSet.length) return;
+    tagSet.sort();
+
+    bar.innerHTML = "";
+    tagSet.forEach((t) => {
+        const pill = document.createElement("span");
+        pill.className = "pill";
+        pill.dataset.tag = t;
+        pill.textContent = t;
+        bar.appendChild(pill);
+    });
+
+    toggle.style.display = "inline-flex";
+
+    toggle.addEventListener("click", () => {
+        const open = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!open));
+        bar.hidden = open;
+    });
+
+    bar.addEventListener("click", (e) => {
+        const pill = e.target.closest(".pill");
+        if (!pill) return;
+        const t = pill.dataset.tag;
+        const i = activeTags.indexOf(t);
+        if (i === -1) {
+            activeTags.push(t);
+            pill.classList.add("active");
+        } else {
+            activeTags.splice(i, 1);
+            pill.classList.remove("active");
+        }
+        applyTagFilter();
+    });
+}
+
+function applyTagFilter() {
+    const rows = document.querySelectorAll(".section-container .row");
+    rows.forEach((r) => {
+        const tags = (r.dataset.tags || "").split(",").filter(Boolean);
+        const show = activeTags.length === 0 || activeTags.some((t) => tags.includes(t));
+        r.classList.toggle("hidden", !show);
+    });
+
+    document.querySelectorAll(".section-container .listing").forEach((list) => {
+        const visible = list.querySelectorAll(".row:not(.hidden)").length;
+        const section = list.closest("section");
+        if (section) section.style.display = visible ? "" : "none";
+        const countEl = section ? section.querySelector(".head .count, .path-head .count") : null;
+        if (countEl) countEl.textContent = visible;
+    });
+
+    const countBadge = document.getElementById("filterCount");
+    if (countBadge) {
+        countBadge.textContent = activeTags.length ? `(${activeTags.length})` : "";
+        countBadge.classList.toggle("show", activeTags.length > 0);
+    }
 }
 
 async function renderPostLists() {
@@ -489,7 +627,12 @@ async function renderPostLists() {
         const posts = await res.json();
         allPosts = posts;
 
+        renderHeroStats(posts);
+        renderFeatured(posts);
+        renderFilterBar(posts);
+
         const createdSections = new Set();
+        const categoryCounts = {};
 
         allPosts.forEach((post) => {
             const category = post.category || "Uncategorized";
@@ -498,12 +641,15 @@ async function renderPostLists() {
             if (!createdSections.has(listId)) {
                 createCategorySectionAtTop(category);
                 createdSections.add(listId);
+                categoryCounts[listId] = 0;
             }
 
             const targetList = document.getElementById(listId);
             if (!targetList) return;
 
-            const li = document.createElement("li");
+            const tags = Array.isArray(post.tags) ? post.tags : [];
+            categoryCounts[listId] += 1;
+
             const a = document.createElement("a");
             const isExternalUrl = /^https?:\/\//i.test(post.filename);
             if (isExternalUrl) {
@@ -513,25 +659,47 @@ async function renderPostLists() {
             } else {
                 a.href = `#${post.filename.replace(".md", "")}`;
             }
-            a.classList.add("post-list-item");
-            a.dataset.tag = post.category || "Post";
+            a.className = "row";
+            a.dataset.tags = tags.join(",");
+
+            const titleWrap = document.createElement("span");
+            titleWrap.className = "title";
+
+            const idx = document.createElement("span");
+            idx.className = "idx";
+            idx.textContent = String(categoryCounts[listId]).padStart(2, "0");
+            titleWrap.appendChild(idx);
 
             if (post.image) {
                 const img = document.createElement("img");
                 img.src = post.image;
                 img.alt = post.title;
                 img.classList.add("post-image");
-                a.appendChild(img);
+                titleWrap.appendChild(img);
+            }
+            titleWrap.appendChild(document.createTextNode(post.title));
+            a.appendChild(titleWrap);
 
-                const title = document.createElement("h3");
-                title.textContent = post.title;
-                a.appendChild(title);
-            } else {
-                a.textContent = post.title;
+            if (tags.length) {
+                const tagsWrap = document.createElement("span");
+                tagsWrap.className = "tags";
+                tags.forEach((t) => {
+                    const tagEl = document.createElement("span");
+                    tagEl.className = "tag";
+                    tagEl.textContent = t;
+                    tagsWrap.appendChild(tagEl);
+                });
+                a.appendChild(tagsWrap);
             }
 
-            li.appendChild(a);
-            targetList.appendChild(li);
+            targetList.appendChild(a);
+        });
+
+        Object.keys(categoryCounts).forEach((listId) => {
+            const list = document.getElementById(listId);
+            const section = list ? list.closest("section") : null;
+            const countEl = section ? section.querySelector(".count") : null;
+            if (countEl) countEl.textContent = categoryCounts[listId];
         });
     } catch (err) {
         console.error("Lỗi load posts:", err);

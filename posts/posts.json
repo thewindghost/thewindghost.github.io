@@ -3,142 +3,168 @@
      "filename": "cve-2025-23001.md",
      "title": "CVE-2025-23001 Host Header Injection ",
      "category": "My CVEs",
-     "image": ""
+     "image": "",
+     "tags": ["Host Header Injection"],
+     "featured": true
   },
   {
      "filename": "cve-2025-62674.md",
      "title": "CVE-2025-62674 Unauthenticated Access To Real Time Streaming Protocol (RTSP) Services",
      "category": "My CVEs",
-     "image": ""
+     "image": "",
+     "tags": ["RTSP", "Unauthenticated Access"],
+     "featured": false
   },
   {
      "filename": "cve-2025-64770.md",
      "title": "CVE-2025-64770 Unauthenticated Access To Open Network Video Interface Forum (ONVIF) Services",
      "category": "My CVEs",
-     "image": ""
+     "image": "",
+     "tags": ["ONVIF", "Unauthenticated Access"],
+     "featured": true
   },
   {
      "filename": "cve-2025-29419.md",
      "title": "CVE-2025-29419 Man-in-the-middle (MITM)",
      "category": "My CVEs",
-     "image": ""
+     "image": "",
+     "tags": ["MITM"],
+     "featured": false
   },
   {
      "filename": "cve-2025-10295.md",
      "title": "CVE 2025 10295 Stored Cross-Site-Scripting (XSS)",
      "category": "My CVEs",
-     "image": ""
+     "image": "",
+     "tags": ["XSS"],
+     "featured": true
   },
   {
      "filename": "https://hackerone.com/reports/4053546",
      "title": "Information Disclosure - Private Content Leaked",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["Information Disclosure"],
+     "featured": false
   },
   {
      "filename": "SQLite_Database_Integration_Full_DB_Downloadable_Unauthenticated.md",
      "title": "Full DB Downloadable Unauthenticated",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["Unauthenticated Access"],
+     "featured": false
   },
   {
      "filename": "BuddyPress_Any_Member_Can_Cancel_or_Resend_Another_User_is_Invitations_IDOR.md",
      "title": "Any Member Can Cancel or Resend Another User's Invitations (IDOR)",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["IDOR"],
+     "featured": false
   },
   {
      "filename": "buddypress-path-traversal-avatar.md",
      "title": "Path Traversal via Unicode Filename Transliteration in Avatar Upload",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["Path Traversal"],
+     "featured": false
   },
   {
      "filename": "BuddyPress_Delete_Another_User_is_Private_Messages_via_Mismatched_Auth_Target.md",
      "title": "Delete Another User's Private Messages via Mismatched Auth Target",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["Access Control"],
+     "featured": false
   },
   {
      "filename": "buddypress-unauthenticated-group-requests.md",
      "title": "Unauthenticated Disclosure of Private Group Membership Requests",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["Information Disclosure", "Unauthenticated Access"],
+     "featured": false
   },
   {
      "filename": "buddypress-referer-group-membership-disclosure.md",
      "title": "Hidden Group Membership Exposed via Referer Header Spoofing",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["Information Disclosure"],
+     "featured": false
   },
   {
      "filename": "buddypress-rest-api-comment-injection.md",
      "title": "Inject Comments into Private Group Activity via REST API Parameter Omission",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["Injection"],
+     "featured": false
   },
   {
      "filename": "buddypress-hidden-group-access-bypass.md",
      "title": "Enumerate and Join Hidden Groups via Chained Access Control Bugs",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["Access Control"],
+     "featured": false
   },
   {
      "filename": "buddypress-unauthenticated-inbox-disclosure.md",
      "title": "Unauthenticated Private Message Inbox Disclosure via Legacy AJAX Handler",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["Information Disclosure", "Unauthenticated Access"],
+     "featured": false
   },
   {
      "filename": "SSRF-induced-Cache-Poisoning-Logic-Bug-en.md",
      "title": "SSRF-induced-Cache-Poisoning-Logic-Bug",
      "category": "Bug Bounty",
-     "image": ""
+     "image": "",
+     "tags": ["SSRF", "Cache Poisoning"],
+     "featured": false
   },
   {
      "filename": "dom_based_open_redirect.md",
      "title": "DOM-Based Redirect Lab Solved Via Unintended Path",
      "category": "Security Research (other)",
-     "image": ""
+     "image": "",
+     "tags": ["Open Redirect"],
+     "featured": false
   },
   {
      "filename": "spel-injection-ssti.md",
      "title": "Spel Injection - Server-Side Template Injection (SSTI)",
      "category": "Security Research (other)",
-     "image": ""
+     "image": "",
+     "tags": ["SSTI"],
+     "featured": false
   },
   {
      "filename": "Infinite-Loop-With-Kafka-SQL.md",
      "title": "Infinite Loop With Kafka SQL (KSQL)",
      "category": "Security Research (other)",
-     "image": ""
+     "image": "",
+     "tags": ["Logic Bug"],
+     "featured": false
   },
   {
      "filename": "all_in_one_burp_suite_settings.md",
      "title": "All-in-One My Burp-Suite Settings",
      "category": "Automation Tools, Tips & Tricks",
-     "image": ""
+     "image": "",
+     "tags": ["Tooling"],
+     "featured": false
   },
   {
      "filename": "piano.md",
      "title": "Piano",
      "category": "Musics",
-     "image": ""
+     "image": "",
+     "tags": [],
+     "featured": false
   }
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
