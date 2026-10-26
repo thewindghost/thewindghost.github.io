@@ -4,6 +4,9 @@
       <meta charset="UTF-8" />
       <link rel="icon" href="/images/favicon.ico" />
       <title>Security Research Blog</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
       <link id="themeStylesheet" rel="stylesheet" href="/style/light.css" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" />
       <!-- Google tag (gtag.js) -->
@@ -20,14 +23,13 @@
       <!--header-->
       <header>
           <div class="header-brand">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="VN" width="28" height="21" style="border-radius:2px;vertical-align:middle;" />
-              <a href="/" class="header-title">TheWindGhost</a>
+              <a href="/" class="header-title"><span class="header-title-path">~/thewindghost</span>$</a>
           </div>
           <nav class="header-nav">
-              <a href="/images/cv-longtruong.pdf" target="_blank">Resume</a>
-              <a href="mailto:longbinhquoitay8@gmail.com">Contact</a>
-              <a href="https://www.linkedin.com/in/thewindghost" target="_blank">LinkedIn</a>
-              <a href="https://github.com/thewindghost" target="_blank">GitHub</a>
+              <a href="/images/cv-longtruong.pdf" target="_blank">resume</a>
+              <a href="mailto:longbinhquoitay8@gmail.com">contact</a>
+              <a href="https://www.linkedin.com/in/thewindghost" target="_blank">linkedin</a>
+              <a href="https://github.com/thewindghost" target="_blank">github</a>
               <button id="toggleWidthBtn" style="display:none;">Full Screen</button>
           </nav>
       </header>
@@ -46,8 +48,20 @@
       <!--chổ chỉnh sửa list-->
       <div class="section-container">
          <section class="hero">
+            <p class="hero-cmd"><b>$</b> whoami</p>
             <h1 class="hero-title">TheWindGhost</h1>
-            <p class="hero-subtitle">Security researcher writing up CVEs, bug bounty findings, and other offensive security research notes.</p>
+            <p class="hero-role">Pentester · Security Researcher · Bug Bounty Hunter</p>
+            <p class="hero-stats" id="heroStats">Published: &hellip;</p>
+            <button class="filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="filterBar" style="display:none;">
+               <span>Filter by tag</span>
+               <span class="filter-count" id="filterCount"></span>
+               <span class="chevron">&#9662;</span>
+            </button>
+            <div class="filter-bar" id="filterBar" hidden></div>
+         </section>
+         <section class="featured-section" id="featuredSection" style="display:none;">
+            <div class="head">// <b>featured</b></div>
+            <div class="featured-grid" id="featuredGrid"></div>
          </section>
       </div>
       <!--con trỏ chạy về đầu post-->
