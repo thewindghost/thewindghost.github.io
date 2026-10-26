@@ -1,5 +1,11 @@
 /* === Giao diện chính === */
 
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
 :root {
 	--dark-bg: #0a0e14;
 	--dark-bg-raised: #0e141c;
@@ -143,8 +149,8 @@ body.focus-mode main {
 
 #toc {
     position: sticky;
-    top: 20px;
-    max-height: 90vh;
+    top: 84px;
+    max-height: calc(90vh - 68px);
     overflow-y: auto;
     flex-shrink: 0;
     width: 250px;
@@ -380,9 +386,9 @@ body.focus-mode main {
 
 .hero-cmd {
     font-family: var(--mono-font);
-    font-size: 12.5px;
+    font-size: 18px;
     color: var(--dark-text-dim);
-    margin: 0 0 6px;
+    margin: 0 0 10px;
 }
 
 .hero-cmd b {
@@ -391,8 +397,8 @@ body.focus-mode main {
 }
 
 .hero-title {
-    font-size: 22px;
-    margin: 0 0 4px;
+    font-size: 44px;
+    margin: 0 0 8px;
     color: var(--dark-text-bright);
     border-bottom: none;
     padding-bottom: 0;
@@ -400,9 +406,9 @@ body.focus-mode main {
 
 .hero-role {
     font-family: var(--mono-font);
-    font-size: 12.5px;
+    font-size: 18px;
     color: var(--accent-green);
-    margin: 0 0 14px;
+    margin: 0 0 18px;
 }
 
 .hero-stats {
@@ -762,7 +768,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 50px;
+    height: 68px;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -777,7 +783,7 @@ header {
 
 .header-title {
     font-family: var(--mono-font);
-    font-size: 13.5px;
+    font-size: 21px;
     font-weight: 500;
     color: var(--dark-text-bright);
     text-decoration: none;
@@ -800,7 +806,7 @@ header {
 }
 
 .header-nav a {
-    font-size: 12.5px;
+    font-size: 17px;
     color: var(--dark-text-dim);
     padding: 6px 10px;
     border-radius: 4px;
