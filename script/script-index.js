@@ -54,7 +54,7 @@ function addCopyButtons() {
 function svgCopy() {
     return `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        style="color:#c7d2db"
+        style="color:#c7d2db">
         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>`;
@@ -142,7 +142,8 @@ function switchTheme(cssFile) {
 
 function getPostFromURL() {
     const hash = window.location.hash;
-    const postName = hash ? hash.substring(1) : null;
+    if (!hash || hash.startsWith("#filter=")) return null;
+    const postName = hash.substring(1);
     return postName ? `/posts/${postName}.md` : null;
 }
 
@@ -170,6 +171,10 @@ function loadMarkdown() {
 
         const oldRec = document.getElementById("recommendations");
         if (oldRec) oldRec.remove();
+
+        // Coming back to the homepage (possibly via a #filter= share link) —
+        // re-sync the tag filter pills/listing to match.
+        applyFiltersFromHash();
         return;
     }
 
@@ -256,6 +261,7 @@ async function loadPost(file, container, main, toc, toggleBtn) {
         renderRecommendations(currentSlug);
 
         addCopyButtons();
+        restoreScrollPosition(currentSlug);
 
         if (main) main.style.display = "block";
         if (toc) toc.style.display = "block";
@@ -383,6 +389,44 @@ function scrollToTop() {
         top: 0,
         behavior: "smooth"
     });
+}
+
+// Remember how far into a post the reader scrolled, so coming back to a
+// long write-up later (or after a reload) resumes where they left off
+// instead of starting back at the top.
+function scrollPositionKey(slug) {
+    return `twg:scrollpos:${slug}`;
+}
+
+function saveScrollPosition() {
+    try {
+        const hash = window.location.hash;
+        if (!hash || hash.startsWith("#filter=")) return;
+        const slug = hash.substring(1);
+        localStorage.setItem(scrollPositionKey(slug), String(window.scrollY));
+    } catch (e) {
+        // localStorage unavailable — ignore
+    }
+}
+
+let scrollSaveTimer = null;
+function onScrollSavePosition() {
+    if (scrollSaveTimer) clearTimeout(scrollSaveTimer);
+    scrollSaveTimer = setTimeout(saveScrollPosition, 300);
+}
+
+function restoreScrollPosition(slug) {
+    if (!slug) return;
+    try {
+        const saved = localStorage.getItem(scrollPositionKey(slug));
+        if (saved === null) return;
+        const y = parseInt(saved, 10);
+        if (!isNaN(y) && y > 0) {
+            setTimeout(() => window.scrollTo(0, y), 50);
+        }
+    } catch (e) {
+        // localStorage unavailable — ignore
+    }
 }
 
 document.addEventListener("click", function(e) {
@@ -574,9 +618,63 @@ function renderFeatured(posts) {
 
 let activeTags = [];
 
+const FILTER_STORAGE_KEY = "twg:activeTags";
+
+function loadStoredTags() {
+    try {
+        const raw = localStorage.getItem(FILTER_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveStoredTags() {
+    try {
+        localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(activeTags));
+    } catch (e) {
+        // localStorage unavailable (private mode, quota, etc.) — ignore
+    }
+}
+
+function getTagsFromHash() {
+    const hash = window.location.hash;
+    if (!hash.startsWith("#filter=")) return null;
+    return decodeURIComponent(hash.slice("#filter=".length))
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
+}
+
+// Re-sync pill selection from the URL's #filter= (share link) if present,
+// else from whatever was last saved to localStorage, then apply it.
+function applyFiltersFromHash() {
+    const bar = document.getElementById("filterBar");
+    if (!bar) return;
+
+    const urlTags = getTagsFromHash();
+    const tags = urlTags !== null ? urlTags : loadStoredTags();
+
+    activeTags = [];
+    bar.querySelectorAll(".pill").forEach((pill) => {
+        const t = pill.dataset.tag;
+        if (tags.includes(t)) {
+            activeTags.push(t);
+            pill.classList.add("active");
+        } else {
+            pill.classList.remove("active");
+        }
+    });
+
+    applyTagFilter();
+}
+
 function renderFilterBar(posts) {
     const bar = document.getElementById("filterBar");
     const toggle = document.getElementById("filterToggle");
+    const clearBtn = document.getElementById("filterClear");
+    const copyBtn = document.getElementById("filterCopy");
     if (!bar || !toggle) return;
 
     const tagSet = [];
@@ -618,6 +716,34 @@ function renderFilterBar(posts) {
         }
         applyTagFilter();
     });
+
+    if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+            activeTags = [];
+            bar.querySelectorAll(".pill.active").forEach((p) => p.classList.remove("active"));
+            applyTagFilter();
+        });
+    }
+
+    if (copyBtn) {
+        copyBtn.addEventListener("click", () => {
+            if (!activeTags.length) return;
+            const url = `${location.origin}${location.pathname}#filter=${encodeURIComponent(activeTags.join(","))}`;
+            navigator.clipboard.writeText(url).then(() => {
+                const original = copyBtn.textContent;
+                copyBtn.textContent = "Copied!";
+                copyBtn.classList.add("copied");
+                setTimeout(() => {
+                    copyBtn.textContent = original;
+                    copyBtn.classList.remove("copied");
+                }, 1500);
+            });
+        });
+    }
+
+    // Restore filter from a shared link (#filter=...) or, failing that,
+    // from whatever the visitor last had selected (localStorage).
+    applyFiltersFromHash();
 }
 
 function applyTagFilter() {
@@ -641,6 +767,13 @@ function applyTagFilter() {
         countBadge.textContent = activeTags.length ? `(${activeTags.length})` : "";
         countBadge.classList.toggle("show", activeTags.length > 0);
     }
+
+    const clearBtn = document.getElementById("filterClear");
+    const copyBtn = document.getElementById("filterCopy");
+    if (clearBtn) clearBtn.style.display = activeTags.length ? "inline-flex" : "none";
+    if (copyBtn) copyBtn.style.display = activeTags.length ? "inline-flex" : "none";
+
+    saveStoredTags();
 }
 
 async function renderPostLists() {
@@ -768,7 +901,9 @@ function highlightHeadingOnHash(slug) {
 function toggleBackButton() {
     const btn = document.getElementById("backHome");
     if (!btn) return;
-    btn.style.display = window.location.hash ? "block" : "none";
+    const hash = window.location.hash;
+    const isPost = hash && !hash.startsWith("#filter=");
+    btn.style.display = isPost ? "block" : "none";
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -784,6 +919,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadMarkdown();
 
     window.addEventListener("scroll", scrollHandler);
+    window.addEventListener("scroll", onScrollSavePosition);
     
     highlightHeadingOnHash();
     toggleBackButton();

@@ -52,11 +52,15 @@
             <h1 class="hero-title">TheWindGhost</h1>
             <p class="hero-role">Pentester · Security Researcher · Bug Bounty Hunter</p>
             <p class="hero-stats" id="heroStats">Published: &hellip;</p>
-            <button class="filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="filterBar" style="display:none;">
-               <span>Filter by tag</span>
-               <span class="filter-count" id="filterCount"></span>
-               <span class="chevron">&#9662;</span>
-            </button>
+            <div class="filter-controls">
+               <button class="filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="filterBar" style="display:none;">
+                  <span>Filter by tag</span>
+                  <span class="filter-count" id="filterCount"></span>
+                  <span class="chevron">&#9662;</span>
+               </button>
+               <button class="filter-clear" id="filterClear" style="display:none;" title="Clear all selected tags">Clear</button>
+               <button class="filter-copy" id="filterCopy" style="display:none;" title="Copy a link to this filter">Copy link</button>
+            </div>
             <div class="filter-bar" id="filterBar" hidden></div>
          </section>
          <section class="featured-section" id="featuredSection" style="display:none;">
