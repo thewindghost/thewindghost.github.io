@@ -492,27 +492,24 @@ function createCategorySectionAtTop(category) {
 }
 
 // Stats line is built from posts.json's own `category` field — no extra
-// field needed. Give a category a nicer label here if the raw category
-// name isn't fit to show as-is, or list it to leave it out of the line
-// entirely (it's still counted in the "Write-ups" total).
-const STAT_LABELS = {
-    "My CVEs": "CVEs",
-    "Bug Bounty": "Bug Bounty Reports",
-    "Security Research (other)": "Security Research",
-};
-const STAT_EXCLUDE = ["Automation Tools, Tips & Tricks", "Musics"];
-
-function renderHeroStats(posts) {
+// field needed. `statsExclude`/`statsLabels` are read from posts.json's
+// top-level config: list a category in statsExclude to leave it out of
+// the line entirely (it's still counted in the "Write-ups" total), and
+// give it an entry in statsLabels to show a nicer name than the raw
+// category string.
+function renderHeroStats(posts, statsExclude, statsLabels) {
     const el = document.getElementById("heroStats");
     if (!el) return;
 
+    const exclude = statsExclude || [];
+    const labels = statsLabels || {};
     const pad = (n) => String(n).padStart(2, "0");
     const counts = {};
     const order = [];
 
     posts.forEach((post) => {
         const category = post.category || "Uncategorized";
-        if (STAT_EXCLUDE.includes(category)) return;
+        if (exclude.includes(category)) return;
 
         if (!(category in counts)) {
             counts[category] = 0;
@@ -522,7 +519,7 @@ function renderHeroStats(posts) {
     });
 
     const parts = order.map((category) => {
-        const label = STAT_LABELS[category] || formatCategoryTitle(category);
+        const label = labels[category] || formatCategoryTitle(category);
         return `<b>${pad(counts[category])}</b> ${label}`;
     });
     parts.push(`<b>${pad(posts.length)}</b> Write-ups`);
@@ -651,10 +648,14 @@ async function renderPostLists() {
         const res = await fetch("/posts/posts.json", { cache: "no-store" });
         if (!res.ok) throw new Error("Không thể load posts.json");
 
-        const posts = await res.json();
+        const data = await res.json();
+        const posts = Array.isArray(data) ? data : (data.posts || []);
         allPosts = posts;
 
-        renderHeroStats(posts);
+        const statsExclude = Array.isArray(data.statsExclude) ? data.statsExclude : [];
+        const statsLabels = data.statsLabels || {};
+
+        renderHeroStats(posts, statsExclude, statsLabels);
         renderFeatured(posts);
         renderFilterBar(posts);
 

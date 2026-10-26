@@ -1,4 +1,11 @@
-[
+{
+  "statsExclude": ["Automation Tools, Tips & Tricks", "Musics"],
+  "statsLabels": {
+    "My CVEs": "CVEs",
+    "Bug Bounty": "Bug Bounty Reports",
+    "Security Research (other)": "Security Research"
+  },
+  "posts": [
   {
      "filename": "cve-2025-23001.md",
      "title": "Host Header Injection",
@@ -167,4 +174,5 @@
      "tags": [],
      "featured": false
   }
-]
+  ]
+}
