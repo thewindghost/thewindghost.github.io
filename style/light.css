@@ -120,7 +120,7 @@ hr {
 	display: flex;
 	justify-content: center;
 	gap: 2em;
-	max-width: 1400px;
+	max-width: 1700px;
 	margin: 2em auto;
 	padding: 0 1em;
 }
@@ -128,9 +128,15 @@ hr {
 main {
 	flex: 1;
 	min-width: 0;
-	max-width: 860px;
+	max-width: 1200px;
 	word-break: break-word;
 	overflow-wrap: break-word;
+}
+
+/* Full Screen toggle: drop the reading-width cap entirely instead of
+   just hiding the TOC, so it actually does something on wide screens. */
+body.focus-mode main {
+	max-width: none;
 }
 
 /* === TOC Sidebar === */
@@ -401,14 +407,15 @@ main {
 
 .hero-stats {
     font-family: var(--mono-font);
-    font-size: 13px;
-    color: var(--dark-text-dim);
+    font-size: 17px;
+    color: var(--dark-text);
     margin: 0;
 }
 
 .hero-stats b {
     color: var(--accent-green);
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1.05em;
 }
 
 .hero-stats .sep {
