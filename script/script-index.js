@@ -491,16 +491,43 @@ function createCategorySectionAtTop(category) {
     sectionContainer.appendChild(section);
 }
 
+// Stats line is built from posts.json's own `category` field — no extra
+// field needed. Give a category a nicer label here if the raw category
+// name isn't fit to show as-is, or list it to leave it out of the line
+// entirely (it's still counted in the "Write-ups" total).
+const STAT_LABELS = {
+    "My CVEs": "CVEs",
+    "Bug Bounty": "Bug Bounty Reports",
+    "Security Research (other)": "Security Research",
+};
+const STAT_EXCLUDE = ["Automation Tools, Tips & Tricks", "Musics"];
+
 function renderHeroStats(posts) {
     const el = document.getElementById("heroStats");
     if (!el) return;
 
-    const total = posts.length;
-    const cveCount = posts.filter((p) => p.category === "My CVEs").length;
-    const bountyCount = posts.filter((p) => p.category === "Bug Bounty").length;
     const pad = (n) => String(n).padStart(2, "0");
+    const counts = {};
+    const order = [];
 
-    el.innerHTML = `Published: <b>${pad(cveCount)}</b> CVEs<span class="sep">|</span><b>${pad(bountyCount)}</b> Bug Bounty Reports<span class="sep">|</span><b>${pad(total)}</b> Write-ups`;
+    posts.forEach((post) => {
+        const category = post.category || "Uncategorized";
+        if (STAT_EXCLUDE.includes(category)) return;
+
+        if (!(category in counts)) {
+            counts[category] = 0;
+            order.push(category);
+        }
+        counts[category] += 1;
+    });
+
+    const parts = order.map((category) => {
+        const label = STAT_LABELS[category] || formatCategoryTitle(category);
+        return `<b>${pad(counts[category])}</b> ${label}`;
+    });
+    parts.push(`<b>${pad(posts.length)}</b> Write-ups`);
+
+    el.innerHTML = "Published: " + parts.join('<span class="sep">|</span>');
 }
 
 function renderFeatured(posts) {
