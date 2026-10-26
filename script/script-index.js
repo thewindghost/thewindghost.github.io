@@ -581,8 +581,10 @@ function renderFeatured(posts) {
 
     if (!featured.length) {
         section.style.display = "none";
+        section.dataset.hasFeatured = "false";
         return;
     }
+    section.dataset.hasFeatured = "true";
 
     featured.forEach((post) => {
         const a = document.createElement("a");
@@ -728,7 +730,9 @@ function renderFilterBar(posts) {
     if (copyBtn) {
         copyBtn.addEventListener("click", () => {
             if (!activeTags.length) return;
-            const url = `${location.origin}${location.pathname}#filter=${encodeURIComponent(activeTags.join(","))}`;
+            // The URL is kept in sync with activeTags by syncFilterHash()
+            // on every change, so the address bar already has the right link.
+            const url = window.location.href;
             navigator.clipboard.writeText(url).then(() => {
                 const original = copyBtn.textContent;
                 copyBtn.textContent = "Copied!";
@@ -744,6 +748,22 @@ function renderFilterBar(posts) {
     // Restore filter from a shared link (#filter=...) or, failing that,
     // from whatever the visitor last had selected (localStorage).
     applyFiltersFromHash();
+}
+
+// Keep the URL's #filter= in sync with activeTags, via replaceState so it
+// never adds a history entry or fires hashchange. Never touches the hash
+// while an actual post is open (hash present and not a #filter= one).
+function syncFilterHash() {
+    const currentHash = window.location.hash;
+    const isPostHash = currentHash && !currentHash.startsWith("#filter=");
+    if (isPostHash) return;
+
+    const base = `${window.location.pathname}${window.location.search}`;
+    const newHash = activeTags.length ? `#filter=${encodeURIComponent(activeTags.join(","))}` : "";
+    const newUrl = base + newHash;
+    if (newUrl !== window.location.pathname + window.location.search + window.location.hash) {
+        history.replaceState(null, "", newUrl);
+    }
 }
 
 function applyTagFilter() {
@@ -762,6 +782,13 @@ function applyTagFilter() {
         if (countEl) countEl.textContent = visible;
     });
 
+    // Featured is a curated "browse everything" shelf — once a filter is
+    // active it's no longer relevant, so hide it while filtering.
+    const featuredSection = document.getElementById("featuredSection");
+    if (featuredSection && featuredSection.dataset.hasFeatured === "true") {
+        featuredSection.style.display = activeTags.length ? "none" : "";
+    }
+
     const countBadge = document.getElementById("filterCount");
     if (countBadge) {
         countBadge.textContent = activeTags.length ? `(${activeTags.length})` : "";
@@ -774,6 +801,7 @@ function applyTagFilter() {
     if (copyBtn) copyBtn.style.display = activeTags.length ? "inline-flex" : "none";
 
     saveStoredTags();
+    syncFilterHash();
 }
 
 async function renderPostLists() {
