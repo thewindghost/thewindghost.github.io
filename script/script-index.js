@@ -914,9 +914,17 @@ function highlightHeadingOnHash(slug) {
         });
 
     const hash = typeof slug === "string" ? slug : location.hash.substring(1);
-    if (!hash) return;
+    // Not a heading slug — it's the tag-filter hash (#filter=...) or empty.
+    if (!hash || hash.startsWith("filter=")) return;
 
-    const target = document.querySelector(`.section-container section h2#${hash}`);
+    let target = null;
+    try {
+        const id = window.CSS && CSS.escape ? CSS.escape(hash) : hash;
+        target = document.querySelector(`.section-container section h2#${id}`);
+    } catch (e) {
+        return;
+    }
+
     if (target) {
         target.classList.add("active-heading");
         target.scrollIntoView({
@@ -936,23 +944,12 @@ function toggleBackButton() {
 
 document.addEventListener("DOMContentLoaded", async () => {
     console.log("Initializing app...");
-    
+
     initializeElements();
-    
-    if (window.initLibraries) {
-        await window.initLibraries();
-    }
-    
-    await renderPostLists();
-    loadMarkdown();
 
-    window.addEventListener("scroll", scrollHandler);
-    window.addEventListener("scroll", onScrollSavePosition);
-    
-    highlightHeadingOnHash();
-    toggleBackButton();
-    addCopyIconsToSections();
-
+    // Wire up static buttons before anything that fetches data or touches
+    // the hash, so one of those throwing never leaves a button dead for
+    // the rest of the session (DOMContentLoaded only runs once).
     const toggleBtn = document.getElementById("toggleWidthBtn");
     if (toggleBtn) {
         toggleBtn.addEventListener("click", () => {
@@ -976,6 +973,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                 toc.style.display = isFocus ? "none" : "block";
             }
         });
+    }
+
+    window.addEventListener("scroll", scrollHandler);
+    window.addEventListener("scroll", onScrollSavePosition);
+
+    try {
+        if (window.initLibraries) {
+            await window.initLibraries();
+        }
+
+        await renderPostLists();
+        loadMarkdown();
+
+        highlightHeadingOnHash();
+        toggleBackButton();
+        addCopyIconsToSections();
+    } catch (err) {
+        console.error("Init error:", err);
     }
 });
 
